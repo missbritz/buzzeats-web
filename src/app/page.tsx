@@ -18,8 +18,8 @@ export default function Home() {
         </div>
       </div>
       <div className="flex justify-center">
-        <div className="max-w-5xl flex items-center text-center min-h-80 py-24 px-12 ">
-          <div className="w-full">
+        <div className="max-w-5xl flex items-center text-center min-h-80 py-24">
+          <div className="w-full px-5">
             <MealForm activeTitle={setSectionTitle}></MealForm>
           </div>
         </div>
