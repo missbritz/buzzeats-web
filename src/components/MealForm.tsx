@@ -154,11 +154,39 @@ export default function MealForm (props:any){
                     </Button>
                 </div>
                 <div className={page === 7 ? `block` : `none`}>
+                    <div className="flex justify-center flex-col pb-12">
+                    <h2 className="text-orange-400 font-bold text-xl py-4">Grilled Chicken with Quinoa Salad and Blackberry Vinaigrette</h2>
+                        <h3 className="text-stone-500 font-bold text-md py-4">Ingredients</h3>
+                        <ul>
+                            <li>Item 1</li>
+                            <li>Item 2</li>
+                            <li>Item 3</li>
+                            <li>Item 4</li>
+                            <li>Item 5</li>
+                            <li>Item 6</li>
+                        </ul>
+                        <h3 className="text-stone-500 font-bold text-md py-4">Instructions</h3>
+                        <ol>
+                            <li>Item 1</li>
+                            <li>Item 2</li>
+                            <li>Item 3</li>
+                            <li>Item 4</li>
+                            <li>Item 5</li>
+                            <li>Item 6</li>
+                        </ol>
+                        <h3 className="text-stone-500 font-bold text-md py-4">Nutritional Breakdown</h3>
+                        <ul>
+                            <li>Item 1</li>
+                            <li>Item 2</li>
+                            <li>Item 3</li>
+                            <li>Item 4</li>
+                        </ul>
+                    </div>
                     <div className="flex justify-center">
                         <Button variant="secondary">I don't like this meal. Next please.</Button>
                     </div>
                     <div className="flex justify-center">
-                        <Button variant="link">Update my preference</Button>
+                        <Button variant="link" onClick={() => setPage(1)}>Update my preference</Button>
                         <Button variant="link">Save this meal</Button>
                     </div>
                 </div>
