@@ -155,7 +155,7 @@ export default function MealForm (props:any){
                 </div>
                 <div className={page === 7 ? `block` : `none`}>
                     <div className="flex justify-center flex-col pb-12">
-                    <h2 className="text-orange-400 font-bold text-xl py-4">Grilled Chicken with Quinoa Salad and Blackberry Vinaigrette</h2>
+                    <h2 className="text-lime-500 font-bold text-xl py-4">Grilled Chicken with Quinoa Salad and Blackberry Vinaigrette</h2>
                         <h3 className="text-stone-500 font-bold text-md py-4">Ingredients</h3>
                         <ul>
                             <li>Item 1</li>
@@ -191,7 +191,7 @@ export default function MealForm (props:any){
                     </div>
                 </div>
                 </Form>
-                {page > 1 && <Button variant="ghost" onClick={() => setPage(page - 1)}>Back</Button>}
+                {(page > 1 && page < 7) ? <Button variant="ghost" onClick={() => setPage(page - 1)}>Back</Button> : ''}
             </div>
             <div className="none">
                 <Button>I don't like this meal. Next please.</Button>
