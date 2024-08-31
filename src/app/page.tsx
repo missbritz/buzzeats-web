@@ -4,10 +4,10 @@ import MealForm from "@/components/MealForm";
 import { bangers } from "./layout";
 import { useState } from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const [sectionTitle, setSectionTitle] = useState('');
-
   return (
     <main className="min-h-screen items-center flex-col justify-center">
       <div className="bg-lime-500 p-12 flex justify-center">

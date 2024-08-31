@@ -191,6 +191,7 @@ export default function MealForm (props:any){
                     </div>
                 </div>
                 </Form>
+                {page > 1 && <Button variant="ghost" onClick={() => setPage(page - 1)}>Back</Button>}
             </div>
             <div className="none">
                 <Button>I don't like this meal. Next please.</Button>
