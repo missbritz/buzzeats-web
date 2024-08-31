@@ -56,6 +56,7 @@ export default function MealForm (props:any){
                 <div className={page === 2 ? `block` : `none`}>
                     <div className="flex flex-col items-center justify-center md:flex-row p-5">
                         <Input type="text" placeholder="My kitchen has..." className="md:mr-5 w-72"/>
+                        <Input type="file" className="md:mr-5 md:mt-0 mt-5 w-72"/>
                         <Button onClick={() => setPage(page + 1)} className="m-5 md:m-0">
                         Next
                         </Button>
@@ -149,17 +150,24 @@ export default function MealForm (props:any){
                         )}
                         />
                     <Button onClick={() => setPage(page + 1)} className="mt-5">
-                        Next
+                        Go
                     </Button>
                 </div>
                 <div className={page === 7 ? `block` : `none`}>
-                    <Button>Go</Button>
+                    <div className="flex justify-center">
+                        <Button variant="secondary">I don't like this meal. Next please.</Button>
+                    </div>
+                    <div className="flex justify-center">
+                        <Button variant="link">Update my preference</Button>
+                        <Button variant="link">Save this meal</Button>
+                    </div>
                 </div>
                 </Form>
             </div>
             <div className="none">
                 <Button>I don't like this meal. Next please.</Button>
-                <Button>Update</Button>
+                <Button>Update my preference</Button>
+                <Button>Save this meal</Button>
             </div>
         </div>
     )

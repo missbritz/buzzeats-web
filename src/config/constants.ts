@@ -6,7 +6,7 @@ const sectionTitle = [
     "My daily calorie intake is...",
     "I want to make meals for...",
     "I have diet restrictions or allergic to...",
-    "I want a meal",
+    "Here's your meal",
 ]
 
 
