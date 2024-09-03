@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
@@ -16,11 +16,11 @@ const FormSchema = z.object({
     allergen: z.array(z.string()).refine((value) => value.some((item) => item), {
       message: "You have to select at least one item.",
     }),
-    mealType: z.string().refine(((value) => value === ''), {
-        message: "You need to select a meal type",
-    }),
-    withCalories: z.boolean().optional(),
-    calories: z.number().optional()
+    mealType: z.string().refine((value => value !== ''), {
+        message: "You need to select a meal type"
+      }),
+    withCalories: z.boolean(),
+    calories: z.number().optional(),
   }).refine(data => data.withCalories && data.calories === 0, {
     message: 'Ooops! You forgot your estimated calories for this meal'
   })
@@ -29,7 +29,7 @@ export default function MealForm (props:any){
     const [page, setPage] = useState(0)
     const [prevPage, setPrevPage] = useState(0)
     const [progress, setProgress] = useState({})
-    const [mealType, setMealType] = useState('')
+    const [selectedMeal, setselectedMeal] = useState('')
     const [allergen, setAllergen] = useState([])
     const [withCalorieMeal, setwithCalorieMeal] = useState(false)
 
@@ -37,7 +37,7 @@ export default function MealForm (props:any){
         resolver: zodResolver(FormSchema),
         defaultValues: {
           allergen: [],
-          mealType: 'breakfast',
+          mealType: '',
           calories: 0,
           withCalories: false
         },
@@ -81,8 +81,10 @@ export default function MealForm (props:any){
 
         if (addCalorie) {
             setwithCalorieMeal(true)
+            form.setValue('withCalories', true)
         } else {
             setwithCalorieMeal(false)
+            form.setValue('withCalories', false)
         }
 
         fn()
@@ -160,9 +162,9 @@ export default function MealForm (props:any){
                             control={form.control}
                             name="withCalories"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="none">
                                 <FormControl>
-                                    <Input type="text" className="none" {...field} value={withCalorieMeal}/>
+                                    <Input type="text" {...field}/>
                                 </FormControl>
                                 <FormMessage />
                                 </FormItem>
@@ -190,18 +192,18 @@ export default function MealForm (props:any){
                     <FormField
                         control={form.control}
                         name="mealType"
-                        render={({ field }) => (
+                        render={({field}) => (
                             <FormItem className="space-y-3">
                             <FormControl>
                                 <RadioGroup
-                                onValueChange={setMealType}
                                 defaultValue={field.value}
+                                onValueChange={field.onChange}
                                 className="flex flex-col space-y-1"
                                 >
                                 <FormItem className="flex items-center space-x-3 space-y-0">
                                     <FormControl>
                                         <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="breakfast" id="breakfast" />
+                                            <RadioGroupItem value="breakfast" id="breakfast" checked={field.value === "breakfast"}/>
                                             <Label htmlFor="breakfast">Breakfast</Label>
                                         </div>
                                     </FormControl>
@@ -209,7 +211,7 @@ export default function MealForm (props:any){
                                 <FormItem className="flex items-center space-x-3 space-y-0">
                                     <FormControl>
                                         <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="brunch" id="brunch" />
+                                            <RadioGroupItem value="brunch" id="brunch" checked={field.value === "brunch"}/>
                                             <Label htmlFor="brunch">Brunch</Label>
                                         </div>
                                     </FormControl>
@@ -217,7 +219,7 @@ export default function MealForm (props:any){
                                 <FormItem className="flex items-center space-x-3 space-y-0">
                                     <FormControl>
                                         <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="lunch" id="lunch" />
+                                            <RadioGroupItem value="lunch" id="lunch" checked={field.value === "lunch"}/>
                                             <Label htmlFor="lunch">Lunch</Label>
                                         </div>
                                     </FormControl>
@@ -225,7 +227,7 @@ export default function MealForm (props:any){
                                 <FormItem className="flex items-center space-x-3 space-y-0">
                                     <FormControl>
                                         <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="dinner" id="dinner"/>
+                                            <RadioGroupItem value="dinner" id="dinner" checked={field.value === "dinner"}/>
                                             <Label htmlFor="dinner">Dinner</Label>
                                         </div>
                                     </FormControl>
@@ -282,7 +284,7 @@ export default function MealForm (props:any){
                     </Button>
                 </div>
                 <div className={page === 7 ? `block` : `none`}>
-                    {console.log(form.getValues())}
+                    {console.log(form)}
                     <div className="flex justify-center flex-col pb-12">
                     <h2 className="text-lime-500 font-bold text-xl py-4">Grilled Chicken with Quinoa Salad and Blackberry Vinaigrette</h2>
                         <h3 className="text-stone-500 font-bold text-md py-4">Ingredients</h3>
