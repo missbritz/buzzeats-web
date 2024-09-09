@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
@@ -16,30 +16,37 @@ const FormSchema = z.object({
     allergen: z.array(z.string()).refine((value) => value.some((item) => item), {
       message: "You have to select at least one item.",
     }),
-    mealType: z.string().refine(((value) => value === ''), {
-        message: "You need to select a meal type",
-    }),
-    withCalories: z.boolean().optional(),
-    calories: z.number().optional()
-  }).refine(data => data.withCalories && data.calories === 0, {
-    message: 'Ooops! You forgot your estimated calories for this meal'
+    mealType: z.string().refine((value => value !== ''), {
+        message: "You need to select a meal type"
+      }),
+    withCalories: z.boolean(),
+    calories: z.preprocess(e => Number(e), z.number()).optional(),
+    ingredients: z.array(z.string()).optional(),
+    moreIngredients: z.array(z.string()).optional(),
+    customIngredients: z.array(z.string()).optional()
   })
 
 export default function MealForm (props:any){
     const [page, setPage] = useState(0)
     const [prevPage, setPrevPage] = useState(0)
     const [progress, setProgress] = useState({})
-    const [mealType, setMealType] = useState('')
+    const [selectedMeal, setselectedMeal] = useState('')
     const [allergen, setAllergen] = useState([])
     const [withCalorieMeal, setwithCalorieMeal] = useState(false)
+    const [customIng, setCustomIng] = useState([])
+    const [includedIng, setIncludedIng] = useState([])
+    const [hasImgIng, sethasImgIng] = useState(false)
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
           allergen: [],
-          mealType: 'breakfast',
+          mealType: '',
           calories: 0,
-          withCalories: false
+          withCalories: false,
+          ingredients: [],
+          moreIngredients: [],
+          customIngredients: []
         },
       })
     
@@ -59,20 +66,58 @@ export default function MealForm (props:any){
         setPrevPage(current)
     }
 
-    // const setIngredients = (data: any) => {
-    //     return {
-    //         ingredients: data
-    //     }
-    // }
+    const processIngredients = (data: any) => {
+        const scannedIng = data.target.value
+        const newIngredients = scannedIng.split(',').map(i => i.trim())
+        console.log(newIngredients)
+        form.setValue('ingredients', newIngredients)
+        consolidateIngredients(newIngredients)
+    }
 
-    const setAllergenFn = (data:any, item:any, checked:boolean) => {
+    const processIngredientsImg = (data: any) => {
+        const scannedIng = data.target.value
+        const newIngredients = scannedIng.split(',').map(i => i.trim())
+        console.log(newIngredients)
+        form.setValue('moreIngredients', newIngredients)
+        sethasImgIng(true)
+        consolidateIngredients(newIngredients)
+    }
+
+    const consolidateIngredients = (ing:string[]) => {
+        if(!ing.length) return
+
+        const allIng:any = []
+
+        ing.map((item, index) => {
+            if(allIng.filter(a => a.value !== item)) {
+                allIng.push({
+                    label: item,
+                    id: item
+                })
+            }
+            return
+        })
+        console.log(allIng)
+        setCustomIng(allIng)
+    }
+
+    const checkCalories = (e: number) => {
+        const newCal = parseInt(e)
+        if(newCal === 0) {
+            form.trigger("calories")
+        } else {
+            form.setValue('calories', newCal)
+        }
+    }
+
+    const setCheckBoxFn = (data:any, item:any, checked:boolean, stateFn: any) => {
 
         const newVal = checked ?
             [...data.value, item.id] :
                 data.value?.filter((value:any) => value !== item.id
         )
 
-        setAllergen(newVal)
+        stateFn(newVal)
 
         return data.onChange(newVal)
     }
@@ -81,35 +126,18 @@ export default function MealForm (props:any){
 
         if (addCalorie) {
             setwithCalorieMeal(true)
+            form.setValue('withCalories', true)
         } else {
             setwithCalorieMeal(false)
+            form.setValue('withCalories', false)
+            form.setValue('calories', 0)
         }
 
         fn()
     }
 
-    // const setCalories = (data: any) => {
-    //     return {
-    //         calories: data > 0 ? data : 0
-    //     }
-    // }
-
-    // const setProgressData = (data: any) => {
-
-    //     // const newData = {
-    //     //     ingredients: data.calories,
-    //     //     calories: data.calories,
-    //     //     mealType: data.mealType,
-    //     //     allergens: ''
-    //     // }
-
-    //     setProgress({
-    //         ...progress,
-    //         ...data
-    //     })
-    // }
-
     function isSubmitted(e:any) {
+        sethasImgIng(false)
         console.log(JSON.stringify(e));
     }
 
@@ -136,11 +164,76 @@ export default function MealForm (props:any){
                     </div>
                 </div>
                 <div className={page === 2 ? `block` : `none`}>
-                    <div className="flex flex-col items-center justify-center md:flex-row p-5">
-                        {/* <Input type="text" placeholder="My kitchen has..." className="md:mr-5 w-72"/>
-                        <Input type="file" className="md:mr-5 md:mt-0 mt-5 w-72"/> */}
+                    <div className="flex flex-col items-center justify-center p-5">
+                        <div className="flex flex-col items-center justify-center p-5">
+                            <div className="flex flex-col items-center justify-center md:flex-row p-5">
+                                <FormField
+                                    control={form.control}
+                                    name="ingredients"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                        <FormControl>
+                                            <Input type="text" {...field} placeholder="My kitchen has..." className="md:mr-5 w-72" onChangeCapture={e => processIngredients(e)} />
+                                        </FormControl>
+                                        <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="moreIngredients"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                        <FormControl>
+                                            <Input type="file" className="md:mr-5 md:mt-0 mt-5 w-72" {...field} onChangeCapture={e => processIngredientsImg(e)}/>
+                                        </FormControl>
+                                        <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <div className="flex flex-row items-center justify-center md:flex-col p-5">
+                                {hasImgIng && customIng.length ? (
+                                    <FormField
+                                        control={form.control}
+                                        name="customIngredients"
+                                        render={() => (
+                                            <FormItem>
+                                            {customIng.map((item) => (
+                                                <FormField
+                                                key={item.id}
+                                                control={form.control}
+                                                name="customIngredients"
+                                                render={({ field }) => {
+                                                    return (
+                                                    <FormItem
+                                                        key={item.id}
+                                                        className="flex flex-row items-start space-x-3 space-y-0"
+                                                    >
+                                                        <FormControl>
+                                                        <Checkbox
+                                                            className="text-stone-400"
+                                                            checked={field.value?.includes(item.id)}
+                                                            onCheckedChange={(checked) => setCheckBoxFn(field, item, checked, () => setIncludedIng())}
+                                                        />
+                                                        </FormControl>
+                                                        <FormLabel className="text-stone-400 font-normal capitalize">
+                                                        {item.label}
+                                                        </FormLabel>
+                                                    </FormItem>
+                                                    )
+                                                }}
+                                                />
+                                            ))}
+                                            <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                ): <></>}
+                            </div> 
+                        </div>
                         <Button onClick={() => setPageTrail(page + 1, page)} className="m-5 md:m-0" type="button">
-                        Next
+                            Next
                         </Button>
                     </div>
                 </div>
@@ -156,13 +249,14 @@ export default function MealForm (props:any){
                 </div>
                 <div className={page === 4 ? `block` : `none`}>
                     <div className="flex flex-col items-center justify-center md:flex-row p-5">
+                        {console.log(parseInt(form.getValues('calories')) > 0)}
                         <FormField
                             control={form.control}
                             name="withCalories"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="none">
                                 <FormControl>
-                                    <Input type="text" className="none" {...field} value={withCalorieMeal}/>
+                                    <Input type="text" {...field}/>
                                 </FormControl>
                                 <FormMessage />
                                 </FormItem>
@@ -174,13 +268,13 @@ export default function MealForm (props:any){
                             render={({ field }) => (
                                 <FormItem>
                                 <FormControl>
-                                    <Input type="text" className="md:mr-5 w-72" placeholder="My calorie intake is..." {...field}/>
+                                    <Input type="text" className="md:mr-5 w-72" onChangeCapture={(e) => checkCalories(e.target.value)} placeholder="My calorie intake is..." {...field}/>
                                 </FormControl>
                                 <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <Button onClick={() => setPageTrail(page + 1, page)} className="m-5 md:m-0" type="button">
+                        <Button onClick={() => setPageTrail(page + 1, page)} className="m-5 md:m-0" type="button" disabled={Number(form.getValues('calories')) > 0 ? false : true}>
                             Next
                         </Button>
                     </div>
@@ -190,18 +284,18 @@ export default function MealForm (props:any){
                     <FormField
                         control={form.control}
                         name="mealType"
-                        render={({ field }) => (
+                        render={({field}) => (
                             <FormItem className="space-y-3">
                             <FormControl>
                                 <RadioGroup
-                                onValueChange={setMealType}
                                 defaultValue={field.value}
+                                onValueChange={field.onChange}
                                 className="flex flex-col space-y-1"
                                 >
                                 <FormItem className="flex items-center space-x-3 space-y-0">
                                     <FormControl>
                                         <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="breakfast" id="breakfast" />
+                                            <RadioGroupItem value="breakfast" id="breakfast" checked={field.value === "breakfast"}/>
                                             <Label htmlFor="breakfast">Breakfast</Label>
                                         </div>
                                     </FormControl>
@@ -209,7 +303,7 @@ export default function MealForm (props:any){
                                 <FormItem className="flex items-center space-x-3 space-y-0">
                                     <FormControl>
                                         <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="brunch" id="brunch" />
+                                            <RadioGroupItem value="brunch" id="brunch" checked={field.value === "brunch"}/>
                                             <Label htmlFor="brunch">Brunch</Label>
                                         </div>
                                     </FormControl>
@@ -217,7 +311,7 @@ export default function MealForm (props:any){
                                 <FormItem className="flex items-center space-x-3 space-y-0">
                                     <FormControl>
                                         <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="lunch" id="lunch" />
+                                            <RadioGroupItem value="lunch" id="lunch" checked={field.value === "lunch"}/>
                                             <Label htmlFor="lunch">Lunch</Label>
                                         </div>
                                     </FormControl>
@@ -225,7 +319,7 @@ export default function MealForm (props:any){
                                 <FormItem className="flex items-center space-x-3 space-y-0">
                                     <FormControl>
                                         <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="dinner" id="dinner"/>
+                                            <RadioGroupItem value="dinner" id="dinner" checked={field.value === "dinner"}/>
                                             <Label htmlFor="dinner">Dinner</Label>
                                         </div>
                                     </FormControl>
@@ -236,7 +330,7 @@ export default function MealForm (props:any){
                             </FormItem>
                         )}
                     />
-                    <Button onClick={() => setPageTrail(page + 1, page)} className="mt-5" type="button">
+                    <Button onClick={() => setPageTrail(page + 1, page)} className="mt-5" type="button" disabled={form.getValues('mealType') !== '' ? false : true}>
                        Next
                     </Button>
                 </div>
@@ -262,7 +356,7 @@ export default function MealForm (props:any){
                                         <Checkbox
                                             className="text-stone-400"
                                             checked={field.value?.includes(item.id)}
-                                            onCheckedChange={(checked) => setAllergenFn(field, item, checked)}
+                                            onCheckedChange={(checked) => setCheckBoxFn(field, item, checked, () => setAllergen())}
                                         />
                                         </FormControl>
                                         <FormLabel className="text-stone-400 font-normal">
@@ -277,7 +371,7 @@ export default function MealForm (props:any){
                             </FormItem>
                         )}
                         />
-                    <Button onClick={() => setPageTrail(page + 1, page)} className="mt-5" type="submit">
+                    <Button onClick={() => setPageTrail(page + 1, page)} className="mt-5" type="submit" disabled={form.getValues('allergen').length > 0 ? false : true}>
                         Go
                     </Button>
                 </div>
