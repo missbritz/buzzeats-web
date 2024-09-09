@@ -1,4 +1,4 @@
-"use client"
+ "use client"
 
 import MealForm from "@/components/MealForm";
 import { bangers } from "./layout";

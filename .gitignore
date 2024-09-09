@@ -5,8 +5,14 @@ dist/
 # dotenv environment variables file (build for Zeit Now)
 .env.build
 
-# Dependency directories
-node_modules/
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/coverage
 packages/
 
 # Logs
@@ -58,3 +64,10 @@ coverage
 
 # Husky deps
 .husky/_
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# vercel
+.vercel
