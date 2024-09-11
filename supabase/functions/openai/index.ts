@@ -4,14 +4,18 @@
 
 // Setup type definitions for built-in Supabase Runtime APIs
 import "jsr:@supabase/functions-js/edge-runtime.d.ts"
-import OpenAI from 'https://deno.land/x/openai@v4.24.0/mod.ts'
+import { OpenAI } from 'https://deno.land/x/openai@v4.24.0/mod.ts'
+import { OpenAIStream, StreamingTextResponse } from 'ai'
+
 
 Deno.serve(async (req) => {
   const { query } = await req.json()
-  const apiKey = Deno.env.get('OPENAI_API_KEY')
+  const apiKey = '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'
   const openai = new OpenAI({
     apiKey: apiKey,
   })
+
+  console.log(query)
 
   const ingredients = ["banana", "apple", "strawberry"]
   const calories = 350
@@ -20,22 +24,24 @@ Deno.serve(async (req) => {
 
   let promptText = '';
 
-  promptText = `You are a highly skilled AI chef and nutritionist. ${image ? `You will include all the edible objects that you find in the image to generate a meal.` : ``} ${ingredients.length ? `You will include ingredients such as ${ingredients.join(",")}.` : ``}  ${calories ? `You will ensure that the estimated calories for the meal is ${calories}.` : ``}  ${allergens.length ? `Above all ingredients provided and to consider for this meal, allergens such as ${allergens.join(",")} will take precedence and should never be included in the meal.` : ``}  You will generate the resulting dish in a json format in a key value pair in camel case where the key names are "mealName" for the dish name, "ingredients", "instructions", "totalCalories", "nutritionFacts", "extras" for specific notes for the dish such that ingredients, instructions must be in array and nutritionFacts with key value pair.`
-
+  promptText = `You are a highly skilled AI chef and nutritionist. ${image ? `You will include all the edible objects that you find in the image to generate a meal.` : ``} You will include ingredients only${ingredients.length ? ` such as ${ingredients.join(",")}.` : `.`}  ${calories ? `You will ensure that the estimated calories for the meal is ${calories}.` : ``}  ${allergens.length ? `Above all ingredients provided and to consider for this meal, allergens such as ${allergens.join(",")} will take precedence and should never be included in the meal.` : ``}  You will generate the resulting dish in a json format in a key value pair in camel case where the key names are "mealName" for the dish name, "ingredients", "instructions", "totalCalories", "nutritionFacts", "extras" for specific notes for the dish such that ingredients, instructions must be in array and nutritionFacts with key value pair.`
   console.log(promptText)
 
   // Documentation here: https://github.com/openai/openai-node
   const chatCompletion = await openai.chat.completions.create({
-    messages: [{ role: 'system', content: query }],
+    messages: [{ role: 'system', content: promptText }],
     model: 'gpt-4o-mini',
     stream: false,
   })
 
-  const reply = chatCompletion.choices[0].message.content
+  //const reply = chatCompletion.choices[0].message.content
 
-  return new Response(reply, {
-    headers: { 'Content-Type': 'text/plain' },
-  })
+  // return new Response(reply, {
+  //   headers: { 'Content-Type': 'text/plain' },
+  // })
+
+  const stream = OpenAIStream(chatCompletion);
+  return new StreamingTextResponse(stream, { 'Content-Type': 'text/plain' });
 })
 
 
