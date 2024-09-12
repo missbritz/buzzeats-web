@@ -232,45 +232,6 @@ export default function MealForm (props:any){
                                     )}
                                 />
                             </div>
-                            {/* <div className="flex flex-row items-center justify-center md:flex-col p-5">
-                                {hasImgIng && customIng.length ? (
-                                    <FormField
-                                        control={form.control}
-                                        name="customIngredients"
-                                        render={() => (
-                                            <FormItem>
-                                            {customIng.map((item) => (
-                                                <FormField
-                                                key={item.id}
-                                                control={form.control}
-                                                name="customIngredients"
-                                                render={({ field }) => {
-                                                    return (
-                                                    <FormItem
-                                                        key={item.id}
-                                                        className="flex flex-row items-start space-x-3 space-y-0"
-                                                    >
-                                                        <FormControl>
-                                                        <Checkbox
-                                                            className="text-stone-400"
-                                                            checked={field.value?.includes(item.id)}
-                                                            onCheckedChange={(checked) => setCheckBoxFn(field, item, checked, () => setIncludedIng())}
-                                                        />
-                                                        </FormControl>
-                                                        <FormLabel className="text-stone-400 font-normal capitalize">
-                                                        {item.label}
-                                                        </FormLabel>
-                                                    </FormItem>
-                                                    )
-                                                }}
-                                                />
-                                            ))}
-                                            <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                ): <></>}
-                            </div>  */}
                         </div>
                         <Button onClick={() => setPageTrail(page + 1, page)} className="m-5 md:m-0" type="button">
                             Next
