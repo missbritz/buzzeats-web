@@ -11,6 +11,7 @@ import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { z } from "zod";
 import { useEffect, useState } from "react";
 import { sectionTitle, allergenItems } from "@/config/constants";
+import { createClient } from "@supabase/supabase-js";
 
 const FormSchema = z.object({
     allergen: z.array(z.string()).refine((value) => value.some((item) => item), {
@@ -22,11 +23,17 @@ const FormSchema = z.object({
     withCalories: z.boolean(),
     calories: z.preprocess(e => Number(e), z.number()).optional(),
     ingredients: z.array(z.string()).optional(),
-    moreIngredients: z.array(z.string()).optional(),
-    customIngredients: z.array(z.string()).optional()
+    moreIngredients: z.string().optional(),
+    ingredientsImg: z.string().optional()
   })
 
 export default function MealForm (props:any){
+
+    const SUPABASE_ENDPOINT = process.env.NEXT_PUBLIC_SUPABASE_ENDPOINT || ''
+    const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+    const SUPABASE_IMG_BUCKET = process.env.NEXT_PUBLIC_SUPABASE_IMG_BUCKET || ''
+
+    const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY)
     const [page, setPage] = useState(0)
     const [prevPage, setPrevPage] = useState(0)
     const [progress, setProgress] = useState({})
@@ -34,7 +41,7 @@ export default function MealForm (props:any){
     const [allergen, setAllergen] = useState([])
     const [withCalorieMeal, setwithCalorieMeal] = useState(false)
     const [customIng, setCustomIng] = useState([])
-    const [includedIng, setIncludedIng] = useState([])
+    const [includedIng, setIncludedIng] = useState('')
     const [hasImgIng, sethasImgIng] = useState(false)
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -45,9 +52,9 @@ export default function MealForm (props:any){
           calories: 0,
           withCalories: false,
           ingredients: [],
-          moreIngredients: [],
-          customIngredients: []
-        },
+          moreIngredients: '',
+          ingredientsImg: ''
+        }
       })
     
     useEffect(() => {
@@ -74,13 +81,34 @@ export default function MealForm (props:any){
         consolidateIngredients(newIngredients)
     }
 
-    const processIngredientsImg = (data: any) => {
-        const scannedIng = data.target.value
-        const newIngredients = scannedIng.split(',').map(i => i.trim())
-        console.log(newIngredients)
-        form.setValue('moreIngredients', newIngredients)
-        sethasImgIng(true)
-        consolidateIngredients(newIngredients)
+    const processIngredientsImg = async (event:any) => {
+        const file = event.target.files[0];
+        const bucket = SUPABASE_IMG_BUCKET
+    
+        // Call Storage API to upload file
+        const { data, error } = await supabase.storage
+          .from(bucket)
+          .upload(file.name, file);
+    
+        // Handle error if upload failed
+        if(error) {
+          console.log(error)
+          return;
+        }
+
+        //Retrieve image
+        // setIncludedIng(retrieveImage(data))
+        form.setValue('ingredientsImg', retrieveImage(data))
+    }
+
+    const retrieveImage = (image: any) => {
+        const bucket = SUPABASE_IMG_BUCKET
+        const { data } = supabase
+            .storage
+            .from(bucket)
+            .getPublicUrl(image.path)
+
+        return data.publicUrl || ''
     }
 
     const consolidateIngredients = (ing:string[]) => {
@@ -191,8 +219,20 @@ export default function MealForm (props:any){
                                         </FormItem>
                                     )}
                                 />
+                                <FormField
+                                    control={form.control}
+                                    name="ingredientsImg"
+                                    render={({ field }) => (
+                                        <FormItem className="none">
+                                            <FormControl>
+                                                <Input type="text" {...field}/>
+                                            </FormControl>
+                                        <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                             </div>
-                            <div className="flex flex-row items-center justify-center md:flex-col p-5">
+                            {/* <div className="flex flex-row items-center justify-center md:flex-col p-5">
                                 {hasImgIng && customIng.length ? (
                                     <FormField
                                         control={form.control}
@@ -230,7 +270,7 @@ export default function MealForm (props:any){
                                         )}
                                     />
                                 ): <></>}
-                            </div> 
+                            </div>  */}
                         </div>
                         <Button onClick={() => setPageTrail(page + 1, page)} className="m-5 md:m-0" type="button">
                             Next
@@ -249,7 +289,6 @@ export default function MealForm (props:any){
                 </div>
                 <div className={page === 4 ? `block` : `none`}>
                     <div className="flex flex-col items-center justify-center md:flex-row p-5">
-                        {console.log(parseInt(form.getValues('calories')) > 0)}
                         <FormField
                             control={form.control}
                             name="withCalories"
@@ -376,7 +415,6 @@ export default function MealForm (props:any){
                     </Button>
                 </div>
                 <div className={page === 7 ? `block` : `none`}>
-                    {console.log(form.getValues())}
                     <div className="flex justify-center flex-col pb-12">
                     <h2 className="text-lime-500 font-bold text-xl py-4">Grilled Chicken with Quinoa Salad and Blackberry Vinaigrette</h2>
                         <h3 className="text-stone-500 font-bold text-md py-4">Ingredients</h3>
