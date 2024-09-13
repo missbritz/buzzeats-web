@@ -22,8 +22,7 @@ const FormSchema = z.object({
       }),
     withCalories: z.boolean(),
     calories: z.preprocess(e => Number(e), z.number()).optional(),
-    ingredients: z.array(z.string()).optional(),
-    moreIngredients: z.string().optional(),
+    ingredients: z.string().optional(),
     ingredientsImg: z.string().optional()
   })
 
@@ -32,17 +31,14 @@ export default function MealForm (props:any){
     const SUPABASE_ENDPOINT = process.env.NEXT_PUBLIC_SUPABASE_ENDPOINT || ''
     const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
     const SUPABASE_IMG_BUCKET = process.env.NEXT_PUBLIC_SUPABASE_IMG_BUCKET || ''
+    const SUPABASE_FN = process.env.NEXT_PUBLIC_SUPABASE_FN
 
     const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY)
     const [page, setPage] = useState(0)
     const [prevPage, setPrevPage] = useState(0)
-    const [progress, setProgress] = useState({})
-    const [selectedMeal, setselectedMeal] = useState('')
     const [allergen, setAllergen] = useState([])
     const [withCalorieMeal, setwithCalorieMeal] = useState(false)
     const [customIng, setCustomIng] = useState([])
-    const [includedIng, setIncludedIng] = useState('')
-    const [hasImgIng, sethasImgIng] = useState(false)
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -51,11 +47,12 @@ export default function MealForm (props:any){
           mealType: '',
           calories: 0,
           withCalories: false,
-          ingredients: [],
-          moreIngredients: '',
+          ingredients: '',
           ingredientsImg: ''
         }
       })
+
+    const { handleSubmit, register } = form
     
     useEffect(() => {
         props.activeTitle(sectionTitle[page])
@@ -73,12 +70,12 @@ export default function MealForm (props:any){
         setPrevPage(current)
     }
 
+    
+
     const processIngredients = (data: any) => {
-        const scannedIng = data.target.value
-        const newIngredients = scannedIng.split(',').map(i => i.trim())
-        console.log(newIngredients)
-        form.setValue('ingredients', newIngredients)
-        consolidateIngredients(newIngredients)
+        const scannedIng = data
+        const newIngredients = scannedIng.split(',').map(i => i.trim()).filter(r => r)
+        return newIngredients
     }
 
     const processIngredientsImg = async (event:any) => {
@@ -109,24 +106,6 @@ export default function MealForm (props:any){
             .getPublicUrl(image.path)
 
         return data.publicUrl || ''
-    }
-
-    const consolidateIngredients = (ing:string[]) => {
-        if(!ing.length) return
-
-        const allIng:any = []
-
-        ing.map((item, index) => {
-            if(allIng.filter(a => a.value !== item)) {
-                allIng.push({
-                    label: item,
-                    id: item
-                })
-            }
-            return
-        })
-        console.log(allIng)
-        setCustomIng(allIng)
     }
 
     const checkCalories = (e: number) => {
@@ -164,16 +143,23 @@ export default function MealForm (props:any){
         fn()
     }
 
-    function isSubmitted(e:any) {
-        sethasImgIng(false)
-        console.log(JSON.stringify(e));
+    async function isSubmitted(e:any) {
+        const ingredientsArr = processIngredients(e.ingredients)
+        const params = {
+            ...e,
+            ingredients: ingredientsArr
+        }
+        const { data, error } = await supabase.functions.invoke('openai', {
+            body: JSON.stringify(params)
+        })
+        console.log(data);
     }
 
     return (
         <div className="w-full">
             <div>
                 <Form  {...form}>
-                <form onSubmit={form.handleSubmit(isSubmitted)}>
+                <form onSubmit={handleSubmit(isSubmitted)}>
                 <div className={page === 0 ? `block` : `none`}>
                     <div className="flex flex-col items-center justify-center md:flex-row p-5">
                         <Button onClick={() => setPageTrail(page + 1, page)} className="m-5 md:m-0" type="button">
@@ -201,7 +187,7 @@ export default function MealForm (props:any){
                                     render={({ field }) => (
                                         <FormItem>
                                         <FormControl>
-                                            <Input type="text" {...field} placeholder="My kitchen has..." className="md:mr-5 w-72" onChangeCapture={e => processIngredients(e)} />
+                                            <Input type="text" {...field} placeholder="My kitchen has..." className="md:mr-5 w-72" onChangeCapture={(e) => form.setValue('ingredients', e.target.value)} />
                                         </FormControl>
                                         <FormMessage />
                                         </FormItem>
@@ -376,6 +362,7 @@ export default function MealForm (props:any){
                     </Button>
                 </div>
                 <div className={page === 7 ? `block` : `none`}>
+                    {console.log(form.getValues())}
                     <div className="flex justify-center flex-col pb-12">
                     <h2 className="text-lime-500 font-bold text-xl py-4">Grilled Chicken with Quinoa Salad and Blackberry Vinaigrette</h2>
                         <h3 className="text-stone-500 font-bold text-md py-4">Ingredients</h3>
