@@ -39,6 +39,7 @@ export default function MealForm (props:any){
     const [allergen, setAllergen] = useState([])
     const [withCalorieMeal, setwithCalorieMeal] = useState(false)
     const [customIng, setCustomIng] = useState([])
+    const [meal, setMeal] = useState({})
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -152,7 +153,7 @@ export default function MealForm (props:any){
         const { data, error } = await supabase.functions.invoke('openai', {
             body: JSON.stringify(params)
         })
-        console.log(data);
+        setMeal(data)
     }
 
     return (
@@ -363,34 +364,29 @@ export default function MealForm (props:any){
                 </div>
                 <div className={page === 7 ? `block` : `none`}>
                     {console.log(form.getValues())}
-                    <div className="flex justify-center flex-col pb-12">
-                    <h2 className="text-lime-500 font-bold text-xl py-4">Grilled Chicken with Quinoa Salad and Blackberry Vinaigrette</h2>
-                        <h3 className="text-stone-500 font-bold text-md py-4">Ingredients</h3>
-                        <ul>
-                            <li>Item 1</li>
-                            <li>Item 2</li>
-                            <li>Item 3</li>
-                            <li>Item 4</li>
-                            <li>Item 5</li>
-                            <li>Item 6</li>
-                        </ul>
-                        <h3 className="text-stone-500 font-bold text-md py-4">Instructions</h3>
-                        <ol>
-                            <li>Item 1</li>
-                            <li>Item 2</li>
-                            <li>Item 3</li>
-                            <li>Item 4</li>
-                            <li>Item 5</li>
-                            <li>Item 6</li>
-                        </ol>
-                        <h3 className="text-stone-500 font-bold text-md py-4">Nutritional Breakdown</h3>
-                        <ul>
-                            <li>Item 1</li>
-                            <li>Item 2</li>
-                            <li>Item 3</li>
-                            <li>Item 4</li>
-                        </ul>
-                    </div>
+                    {Object.keys(meal).length ? (
+                        <div className="flex justify-center flex-col pb-12">
+                            <h2 className="text-lime-500 font-bold text-xl py-4">{meal.mealName}</h2>
+                            <h3 className="text-stone-500 font-bold text-md py-4">Ingredients</h3>
+                            <ul>
+                                {meal.ingredients.map(item => <li>{item}</li>)}
+                            </ul>
+                            <h3 className="text-stone-500 font-bold text-md py-4">Instructions</h3>
+                            <ol>
+                                {meal.instructions.map(item => <li>{item}</li>)}
+                            </ol>
+                            <h3 className="text-stone-500 font-bold text-md py-4">Nutritional Breakdown</h3>
+                            <ul>
+                                {Object.entries(meal.nutritionFacts)
+                                    .map(([key, value]) => {
+                                        return <li>{key}: {value}</li>
+                                    })
+                                }
+                            </ul>
+                            <p><strong>Total Calories: </strong>{meal.totalCalories}</p>
+                            <p>Notes: {meal.extras}</p>
+                        </div>
+                    ) : "...loading"}
                     <div className="flex justify-center">
                         <Button variant="secondary">I don't like this meal. Next please.</Button>
                     </div>

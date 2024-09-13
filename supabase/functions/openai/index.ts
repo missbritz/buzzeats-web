@@ -50,6 +50,9 @@ Deno.serve(async (req) => {
 
   return new Response(reply, {
     status: 200,
-    headers: { 'Content-Type': 'text/plain' },
+    headers: { 
+      ...corsHeaders,
+      'Content-Type': 'application/json'
+    },
   })
 })
