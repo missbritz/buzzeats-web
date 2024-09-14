@@ -2,6 +2,7 @@
   "name": "buzz-eats",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -37,7 +38,8 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
-    "eslint-config-next": "14.2.7",
+    "eslint-config-next": "15.0.0-canary.130",
+    "eslint-config-prettier": "9.1.0",
     "postcss": "8.4.33",
     "tailwind-merge": "^2.5.2",
     "tailwindcss": "3.4.1",
