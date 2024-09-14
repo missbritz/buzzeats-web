@@ -1,10 +1,11 @@
  "use client"
 
 import MealForm from "@/components/MealForm";
-import { bangers } from "./layout";
-import { useState } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Bangers } from "next/font/google";
+
+const bangers = Bangers({ weight: ["400"], subsets: ["latin"] })
 
 export default function Home() {
   const [sectionTitle, setSectionTitle] = useState('');

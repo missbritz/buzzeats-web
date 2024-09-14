@@ -31,14 +31,10 @@ export default function MealForm (props:any){
     const SUPABASE_ENDPOINT = process.env.NEXT_PUBLIC_SUPABASE_ENDPOINT || ''
     const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
     const SUPABASE_IMG_BUCKET = process.env.NEXT_PUBLIC_SUPABASE_IMG_BUCKET || ''
-    const SUPABASE_FN = process.env.NEXT_PUBLIC_SUPABASE_FN
 
     const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY)
     const [page, setPage] = useState(0)
     const [prevPage, setPrevPage] = useState(0)
-    const [allergen, setAllergen] = useState([])
-    const [withCalorieMeal, setwithCalorieMeal] = useState(false)
-    const [customIng, setCustomIng] = useState([])
     const [meal, setMeal] = useState({})
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -53,7 +49,7 @@ export default function MealForm (props:any){
         }
       })
 
-    const { handleSubmit, register } = form
+    const { handleSubmit } = form
     
     useEffect(() => {
         props.activeTitle(sectionTitle[page])
@@ -133,10 +129,8 @@ export default function MealForm (props:any){
     const setCalorieBtn = (addCalorie: boolean, fn:any) => {
 
         if (addCalorie) {
-            setwithCalorieMeal(true)
             form.setValue('withCalories', true)
         } else {
-            setwithCalorieMeal(false)
             form.setValue('withCalories', false)
             form.setValue('calories', 0)
         }
