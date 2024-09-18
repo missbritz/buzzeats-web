@@ -1,52 +1,47 @@
 const sectionTitle = [
-    "",
-    "I need help with my meal and…",
-    "My kitchen has...",
-    "I need a meal with estimated calorie of...",
-    "My daily calorie intake is...",
-    "I want to make meals for...",
-    "I have diet restrictions or allergic to...",
+    '',
+    'I need help with my meal and…',
+    'My kitchen has...',
+    'I need a meal with estimated calorie of...',
+    'My daily calorie intake is...',
+    'I want to make meals for...',
+    'I have diet restrictions or allergic to...',
     "Here's your meal",
-]
-
+];
 
 const allergenItems = [
     {
         id: 'fish',
-        label: 'Fish'
+        label: 'Fish',
     },
     {
         id: 'pork',
-        label: 'Pork'
+        label: 'Pork',
     },
     {
         id: 'beef',
-        label: 'Beef'
+        label: 'Beef',
     },
     {
         id: 'shellfish',
-        label: 'Shellfish / Crustaceans'
+        label: 'Shellfish / Crustaceans',
     },
     {
         id: 'molluscs',
-        label: 'Molluscs'
+        label: 'Molluscs',
     },
     {
         id: 'eggs',
-        label: 'Eggs'
+        label: 'Eggs',
     },
     {
         id: 'gluten',
-        label: 'Gluten'
+        label: 'Gluten',
     },
     {
         id: 'treenuts',
-        label: 'Tree Nuts'
+        label: 'Tree Nuts',
     },
-]
+];
 
-
-export {
-    sectionTitle,
-    allergenItems
-}
+export { sectionTitle, allergenItems };
