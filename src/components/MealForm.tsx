@@ -19,7 +19,7 @@ import { z } from 'zod';
 import { useEffect, useState } from 'react';
 import { sectionTitle, allergenItems } from '@/config/constants';
 import { createClient } from '@supabase/supabase-js';
-import MealShortForm from './MealShortForm';
+import Meal from './Meal';
 
 const FormSchema = z.object({
     allergen: z
@@ -49,6 +49,7 @@ export default function MealForm(props: any) {
     const [page, setPage] = useState<number>(0);
     const [prevPage, setPrevPage] = useState<number>(0);
     const [meal, setMeal] = useState<object>({});
+    const [error, setError] = useState<object>({});
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -108,7 +109,6 @@ export default function MealForm(props: any) {
         }
 
         //Retrieve image
-        // setIncludedIng(retrieveImage(data))
         form.setValue('ingredientsImg', retrieveImage(data));
     };
 
@@ -157,10 +157,12 @@ export default function MealForm(props: any) {
             ...e,
             ingredients: ingredientsArr,
         };
-        const { data } = await supabase.functions.invoke('openai', {
+        const { data, error } = await supabase.functions.invoke('openai', {
             body: JSON.stringify(params),
         });
-        setMeal(data);
+
+        setMeal(data && Object.keys(data).length ? data : {})
+        setError(error ? error : {})
     }
 
     return (
@@ -514,64 +516,16 @@ export default function MealForm(props: any) {
                             </Button>
                         </div>
                         <div className={page === 7 ? `block` : `none`}>
-                            {console.log(form.getValues())}
-                            {Object.keys(meal).length ? (
-                                <div className="flex justify-center flex-col pb-12">
-                                    <h2 className="text-lime-500 font-bold text-xl py-4">
-                                        {meal.mealName}
-                                    </h2>
-                                    <h3 className="text-stone-500 font-bold text-md py-4">
-                                        Ingredients
-                                    </h3>
-                                    <ul>
-                                        {meal.ingredients.map((item) => (
-                                            <li>{item}</li>
-                                        ))}
-                                    </ul>
-                                    <h3 className="text-stone-500 font-bold text-md py-4">
-                                        Instructions
-                                    </h3>
-                                    <ol>
-                                        {meal.instructions.map((item) => (
-                                            <li>{item}</li>
-                                        ))}
-                                    </ol>
-                                    <h3 className="text-stone-500 font-bold text-md py-4">
-                                        Nutritional Breakdown
-                                    </h3>
-                                    <ul>
-                                        {Object.entries(
-                                            meal.nutritionFacts
-                                        ).map(([key, value]) => {
-                                            return (
-                                                <li>
-                                                    {key}: {value}
-                                                </li>
-                                            );
-                                        })}
-                                    </ul>
-                                    <p>
-                                        <strong>Total Calories: </strong>
-                                        {meal.totalCalories}
-                                    </p>
-                                    <p>Notes: {meal.extras}</p>
-                                </div>
-                            ) : (
-                                '...loading'
-                            )}
-                            <div className="flex justify-center">
-                                <Button variant="secondary">
-                                    I don't like this meal. Next please.
-                                </Button>
-                            </div>
-                            <div className="flex justify-center">
-                                <Button
-                                    variant="link"
-                                    onClick={() => setPageTrail(1, 0)}
-                                >
-                                    Update my preference
-                                </Button>
-                                <Button variant="link">Save this meal</Button>
+                            <div>
+                                {console.log(form.getValues())}
+                                {console.log(form.formState)}
+                                {form.formState && form.formState.isSubmitted ? (
+                                    <div>
+                                        <Meal meal={meal} error={error}/>
+                                    </div>
+                                ) : (
+                                    <div>...loading</div>
+                                )}
                             </div>
                         </div>
                     </form>
