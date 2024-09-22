@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Form,
     FormControl,
@@ -34,7 +34,7 @@ const FormSchema = z.object({
     moreIngredients: z.string().optional()
 });
 
-const MealPage = () => {
+const MealPage = ({ meal, mealError }: any) => {
     const SUPABASE_ENDPOINT = process.env.NEXT_PUBLIC_SUPABASE_ENDPOINT || '';
     const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
     const SUPABASE_IMG_BUCKET =
@@ -99,6 +99,18 @@ const MealPage = () => {
         }
     };
 
+    const setCheckBoxFn = (
+        data: any,
+        item: any,
+        checked: boolean
+    ) => {
+        const newVal = checked
+            ? [...data.value, item.id]
+            : data.value?.filter((value: any) => value !== item.id);
+
+        return data.onChange(newVal);
+    };
+
     async function isSubmitted(e: any) {
         const ingredientsArr = processIngredients(e.ingredients);
         const params = {
@@ -109,260 +121,268 @@ const MealPage = () => {
             body: JSON.stringify(params),
         });
 
-        // setMeal(data && Object.keys(data).length ? data : {})
-        // setError(error ? error : {})
+        meal(data && Object.keys(data).length ? data : {})
+        mealError(error ? error : {})
     }
 
     const { handleSubmit } = form;
 
     return (
-        <Form {...form}>
-            <form onSubmit={handleSubmit(isSubmitted)}>
-                <div className="flex flex-col items-center justify-center p-5">
+        <div>
+        {!form.formState.isSubmitting ? (
+            <Form {...form}>
+                <form onSubmit={handleSubmit(isSubmitted)}>
                     <div className="flex flex-col items-center justify-center p-5">
-                        <h3 className="text-stone-400 px-5 pb-5 font-bold">
-                            Do you have your preferred ingredients?
-                        </h3>
-                        <FormField
-                            control={form.control}
-                            name="ingredients"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormControl>
-                                        <Input
-                                            type="text"
-                                            {...field}
-                                            placeholder="My kitchen has..."
-                                            className="md:mr-5 w-72"
-                                            onChangeCapture={(
-                                                e
-                                            ) => {
-                                                    const textInput = e.target as HTMLTextAreaElement;
-                                                    form.setValue(
-                                                        'ingredients',
-                                                        textInput.value
+                        <div className="flex flex-col items-center justify-center p-5">
+                            <h3 className="text-stone-400 px-5 pb-5 font-bold">
+                                Do you have your preferred ingredients?
+                            </h3>
+                            <FormField
+                                control={form.control}
+                                name="ingredients"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <Input
+                                                type="text"
+                                                {...field}
+                                                placeholder="My kitchen has..."
+                                                className="md:mr-5 w-72"
+                                                onChangeCapture={(
+                                                    e
+                                                ) => {
+                                                        const textInput = e.target as HTMLTextAreaElement;
+                                                        form.setValue(
+                                                            'ingredients',
+                                                            textInput.value
+                                                        )
+                                                    }
+                                                }
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="moreIngredients"
+                                render={({ field }) => (
+                                    <FormItem className="pt-5">
+                                        <FormControl>
+                                            <Input
+                                                type="file"
+                                                className="md:mr-5 md:mt-0 mt-5 w-72"
+                                                {...field}
+                                                onChangeCapture={(
+                                                    e
+                                                ) =>
+                                                    processIngredientsImg(
+                                                        e
                                                     )
                                                 }
-                                            }
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="moreIngredients"
-                            render={({ field }) => (
-                                <FormItem className="pt-5">
-                                    <FormControl>
-                                        <Input
-                                            type="file"
-                                            className="md:mr-5 md:mt-0 mt-5 w-72"
-                                            {...field}
-                                            onChangeCapture={(
-                                                e
-                                            ) =>
-                                                processIngredientsImg(
-                                                    e
-                                                )
-                                            }
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="ingredientsImg"
-                            render={({ field }) => (
-                                <FormItem className="none">
-                                    <FormControl>
-                                        <Input
-                                            type="text"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <h3 className="text-stone-400 px-5 pt-10 pb-5 font-bold">
-                            What is your estimated caloric intake?
-                        </h3>
-                        <FormField
-                            control={form.control}
-                            name="calories"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormControl>
-                                        <Input
-                                            type="text"
-                                            className="md:mr-5 w-72"
-                                            onChangeCapture={(e) =>
-                                                checkCalories(
-                                                    e.target.value
-                                                )
-                                            }
-                                            placeholder="My calorie intake is..."
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <h3 className="text-stone-400 px-5 pt-10 pb-5 font-bold">
-                            What meal are you making for?
-                        </h3>
-                        <div className="w-full px-5 text-left">
-                        <FormField
-                            control={form.control}
-                            name="mealType"
-                            render={({ field }) => (
-                                <FormItem className="space-y-3 px-10">
-                                    <FormControl>
-                                        <RadioGroup
-                                            defaultValue={field.value}
-                                            onValueChange={field.onChange}
-                                            className="flex flex-col space-y-1"
-                                        >
-                                            <FormItem className="flex items-center space-x-3 space-y-0">
-                                                <FormControl>
-                                                    <div className="flex items-center space-x-2">
-                                                        <RadioGroupItem
-                                                            value="breakfast"
-                                                            id="breakfast"
-                                                            checked={
-                                                                field.value ===
-                                                                'breakfast'
-                                                            }
-                                                        />
-                                                        <Label htmlFor="breakfast">
-                                                            Breakfast
-                                                        </Label>
-                                                    </div>
-                                                </FormControl>
-                                            </FormItem>
-                                            <FormItem className="flex items-center space-x-3 space-y-0">
-                                                <FormControl>
-                                                    <div className="flex items-center space-x-2">
-                                                        <RadioGroupItem
-                                                            value="brunch"
-                                                            id="brunch"
-                                                            checked={
-                                                                field.value ===
-                                                                'brunch'
-                                                            }
-                                                        />
-                                                        <Label htmlFor="brunch">
-                                                            Brunch
-                                                        </Label>
-                                                    </div>
-                                                </FormControl>
-                                            </FormItem>
-                                            <FormItem className="flex items-center space-x-3 space-y-0">
-                                                <FormControl>
-                                                    <div className="flex items-center space-x-2">
-                                                        <RadioGroupItem
-                                                            value="lunch"
-                                                            id="lunch"
-                                                            checked={
-                                                                field.value ===
-                                                                'lunch'
-                                                            }
-                                                        />
-                                                        <Label htmlFor="lunch">
-                                                            Lunch
-                                                        </Label>
-                                                    </div>
-                                                </FormControl>
-                                            </FormItem>
-                                            <FormItem className="flex items-center space-x-3 space-y-0">
-                                                <FormControl>
-                                                    <div className="flex items-center space-x-2">
-                                                        <RadioGroupItem
-                                                            value="dinner"
-                                                            id="dinner"
-                                                            checked={
-                                                                field.value ===
-                                                                'dinner'
-                                                            }
-                                                        />
-                                                        <Label htmlFor="dinner">
-                                                            Dinner
-                                                        </Label>
-                                                    </div>
-                                                </FormControl>
-                                            </FormItem>
-                                        </RadioGroup>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
                             />
-                        </div>
+                            <FormField
+                                control={form.control}
+                                name="ingredientsImg"
+                                render={({ field }) => (
+                                    <FormItem className="none">
+                                        <FormControl>
+                                            <Input
+                                                type="text"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                             <h3 className="text-stone-400 px-5 pt-10 pb-5 font-bold">
-                                Do you diet restrictions or allergens?
+                                What is your estimated caloric intake?
+                            </h3>
+                            <FormField
+                                control={form.control}
+                                name="calories"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <Input
+                                                type="text"
+                                                className="md:mr-5 w-72"
+                                                onChangeCapture={(e) =>
+                                                    checkCalories(
+                                                        e.target.value
+                                                    )
+                                                }
+                                                placeholder="My calorie intake is..."
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <h3 className="text-stone-400 px-5 pt-10 pb-5 font-bold">
+                                What meal are you making for?
                             </h3>
                             <div className="w-full px-5 text-left">
-                                <FormField
-                                    control={form.control}
-                                    name="allergen"
-                                    render={() => (
-                                        <FormItem className="space-y-3 px-10">
-                                            {allergenItems.map((item) => (
-                                                <FormField
-                                                    key={item.id}
-                                                    control={form.control}
-                                                    name="allergen"
-                                                    render={({ field }) => {
-                                                        return (
-                                                            <FormItem
-                                                                key={item.id}
-                                                                className="flex flex-row items-start space-x-3 space-y-0"
-                                                            >
-                                                                <FormControl>
-                                                                    <Checkbox
-                                                                        className="text-stone-400"
-                                                                        checked={field.value?.includes(
-                                                                            item.id
-                                                                        )}
-                                                                        onCheckedChange={(
-                                                                            checked
-                                                                        ) =>
-                                                                            setCheckBoxFn(
-                                                                                field,
-                                                                                item,
-                                                                                checked
-                                                                            )
-                                                                        }
-                                                                    />
-                                                                </FormControl>
-                                                                <FormLabel className="text-stone-400 font-normal">
-                                                                    {item.label}
-                                                                </FormLabel>
-                                                            </FormItem>
-                                                        );
-                                                    }}
-                                                />
-                                            ))}
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
+                            <FormField
+                                control={form.control}
+                                name="mealType"
+                                render={({ field }) => (
+                                    <FormItem className="space-y-3 px-10">
+                                        <FormControl>
+                                            <RadioGroup
+                                                defaultValue={field.value}
+                                                onValueChange={field.onChange}
+                                                className="flex flex-col space-y-1"
+                                            >
+                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                    <FormControl>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem
+                                                                value="breakfast"
+                                                                id="breakfast"
+                                                                checked={
+                                                                    field.value ===
+                                                                    'breakfast'
+                                                                }
+                                                            />
+                                                            <Label htmlFor="breakfast">
+                                                                Breakfast
+                                                            </Label>
+                                                        </div>
+                                                    </FormControl>
+                                                </FormItem>
+                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                    <FormControl>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem
+                                                                value="brunch"
+                                                                id="brunch"
+                                                                checked={
+                                                                    field.value ===
+                                                                    'brunch'
+                                                                }
+                                                            />
+                                                            <Label htmlFor="brunch">
+                                                                Brunch
+                                                            </Label>
+                                                        </div>
+                                                    </FormControl>
+                                                </FormItem>
+                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                    <FormControl>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem
+                                                                value="lunch"
+                                                                id="lunch"
+                                                                checked={
+                                                                    field.value ===
+                                                                    'lunch'
+                                                                }
+                                                            />
+                                                            <Label htmlFor="lunch">
+                                                                Lunch
+                                                            </Label>
+                                                        </div>
+                                                    </FormControl>
+                                                </FormItem>
+                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                    <FormControl>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem
+                                                                value="dinner"
+                                                                id="dinner"
+                                                                checked={
+                                                                    field.value ===
+                                                                    'dinner'
+                                                                }
+                                                            />
+                                                            <Label htmlFor="dinner">
+                                                                Dinner
+                                                            </Label>
+                                                        </div>
+                                                    </FormControl>
+                                                </FormItem>
+                                            </RadioGroup>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
                                 />
                             </div>
+                                <h3 className="text-stone-400 px-5 pt-10 pb-5 font-bold">
+                                    Do you diet restrictions or allergens?
+                                </h3>
+                                <div className="w-full px-5 text-left">
+                                    <FormField
+                                        control={form.control}
+                                        name="allergen"
+                                        render={() => (
+                                            <FormItem className="space-y-3 px-10">
+                                                {allergenItems.map((item) => (
+                                                    <FormField
+                                                        key={item.id}
+                                                        control={form.control}
+                                                        name="allergen"
+                                                        render={({ field }) => {
+                                                            return (
+                                                                <FormItem
+                                                                    key={item.id}
+                                                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                                                >
+                                                                    <FormControl>
+                                                                        <Checkbox
+                                                                            className="text-stone-400"
+                                                                            checked={field.value?.includes(
+                                                                                item.id
+                                                                            )}
+                                                                            onCheckedChange={(
+                                                                                checked
+                                                                            ) =>
+                                                                                setCheckBoxFn(
+                                                                                    field,
+                                                                                    item,
+                                                                                    checked
+                                                                                )
+                                                                            }
+                                                                        />
+                                                                    </FormControl>
+                                                                    <FormLabel className="text-stone-400 font-normal">
+                                                                        {item.label}
+                                                                    </FormLabel>
+                                                                </FormItem>
+                                                            );
+                                                        }}
+                                                    />
+                                                ))}
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                        </div>
+                        {console.log(form.getValues())}
+                        {console.log(form.formState)}
+                        <Button
+                            className="m-10"
+                            type="submit"
+                        >
+                            Let's get cooking!
+                        </Button>
                     </div>
-                    <Button
-                        className="m-10"
-                        type="submit"
-                    >
-                        Let's get cooking!
-                    </Button>
-                </div>
-            </form>
-        </Form>
+                </form>
+            </Form>
+        ) : (
+            <p>...loading</p>
+        )}
+        </div>
     )
 }
 

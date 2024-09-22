@@ -52,20 +52,20 @@ export default function MealForm(props: any) {
     const [meal, setMeal] = useState<object>({});
     const [error, setError] = useState<object>({});
 
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
-        defaultValues: {
-            allergen: [],
-            mealType: '',
-            calories: 0,
-            withCalories: false,
-            ingredients: '',
-            ingredientsImg: '',
-            moreIngredients: ''
-        },
-    });
+    // const form = useForm<z.infer<typeof FormSchema>>({
+    //     resolver: zodResolver(FormSchema),
+    //     defaultValues: {
+    //         allergen: [],
+    //         mealType: '',
+    //         calories: 0,
+    //         withCalories: false,
+    //         ingredients: '',
+    //         ingredientsImg: '',
+    //         moreIngredients: ''
+    //     },
+    // });
 
-    const { handleSubmit } = form;
+    // const { handleSubmit } = form;
 
     useEffect(() => {
         if(page) activeTitle(sectionTitle[page]);
@@ -168,7 +168,8 @@ export default function MealForm(props: any) {
 
     return (
         <div className="w-full">
-            <MealPage></MealPage>
+            <MealPage meal={setMeal} mealError={setError}/>
+            {(Object.keys(meal).length || Object.keys(error).length) ? <Meal meal={meal} error={error}/> : null}
             {/* <div>
                 <Form {...form}>
                     <form onSubmit={handleSubmit(isSubmitted)}>
