@@ -20,6 +20,7 @@ import { useEffect, useState } from 'react';
 import { sectionTitle, allergenItems } from '@/config/constants';
 import { createClient } from '@supabase/supabase-js';
 import Meal from './Meal';
+import MealPage from './MealPage';
 
 const FormSchema = z.object({
     allergen: z
@@ -167,11 +168,12 @@ export default function MealForm(props: any) {
 
     return (
         <div className="w-full">
-            <div>
+            <MealPage></MealPage>
+            {/* <div>
                 <Form {...form}>
                     <form onSubmit={handleSubmit(isSubmitted)}>
                         <div className={page === 0 ? `block` : `none`}>
-                            <div className="flex flex-col items-center justify-center md:flex-row p-5">
+                            <div className="flex flex-col items-center justify-center px-5">
                                 <Button
                                     onClick={() => setPageTrail(page + 1, page)}
                                     className="m-5 md:m-0"
@@ -179,6 +181,7 @@ export default function MealForm(props: any) {
                                 >
                                     Let's get cooking!
                                 </Button>
+                                <MealPage></MealPage>
                             </div>
                         </div>
                         <div className={page === 1 ? `block` : `none`}>
@@ -540,7 +543,7 @@ export default function MealForm(props: any) {
                 ) : (
                     ''
                 )}
-            </div>
+            </div> */}
             <div className="none">
                 <Button>I don't like this meal. Next please.</Button>
                 <Button>Update my preference</Button>
