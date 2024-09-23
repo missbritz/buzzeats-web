@@ -5,10 +5,7 @@ const nextConfig = {
     images: {
         unoptimized: true,
     },
-    trailingSlash: true,
-    exclude: [
-        'supabase'
-    ]
+    trailingSlash: true
 };
 
 export default nextConfig;
