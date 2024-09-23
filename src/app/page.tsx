@@ -2,13 +2,11 @@
 
 import MealForm from '@/components/MealForm';
 import Link from 'next/link';
-import { useState } from 'react';
 import { Bangers } from 'next/font/google';
 
 const bangers = Bangers({ weight: ['400'], subsets: ['latin'] });
 
 export default function Home() {
-    const [sectionTitle, setSectionTitle] = useState('');
     return (
         <main className="min-h-screen items-center flex-col justify-center">
             <div className="bg-lime-500 p-12 flex justify-center">
@@ -29,10 +27,7 @@ export default function Home() {
             <div className="flex justify-center">
                 <div className="max-w-5xl flex items-center text-center min-h-80 py-12">
                     <div className="w-full px-5">
-                        {/* <h3 className="text-stone-400 p-5 font-bold">
-                            {sectionTitle}
-                        </h3> */}
-                        <MealForm activeTitle={setSectionTitle}></MealForm>
+                        <MealForm />
                     </div>
                 </div>
             </div>
