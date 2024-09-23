@@ -2,7 +2,7 @@ import 'https://deno.land/x/xhr@0.3.0/mod.ts'
 import { OpenAI } from 'https://deno.land/x/openai@v4.24.0/mod.ts'
 
 export const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': Deno.env.get('FE_DOMAIN'),
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
@@ -49,7 +49,6 @@ Deno.serve(async (req) => {
   const reply = chatCompletion.choices[0].message.content
 
   return new Response(reply, {
-    status: 200,
     headers: { 
       ...corsHeaders,
       'Content-Type': 'application/json'

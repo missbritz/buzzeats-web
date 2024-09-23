@@ -1,5 +1,6 @@
 # buzzeats-web
-[![Deploy Next.js site to Pages](https://github.com/missbritz/buzzeats-web/actions/workflows/github-pages.yml/badge.svg)](https://github.com/missbritz/buzzeats-web/actions/workflows/github-pages.yml)
+[![Deploy to Github Pages](https://github.com/missbritz/buzzeats-web/actions/workflows/github-pages.yml/badge.svg)](https://github.com/missbritz/buzzeats-web/actions/workflows/github-pages.yml)
+
 AI-powered meal generator and supports edible object recognition from uploaded image using OpenAI GPT-4o-mini.
 
 Try it out here [https://missbritz.github.io/buzzeats-web/](https://missbritz.github.io/buzzeats-web/)
