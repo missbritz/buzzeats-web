@@ -32,7 +32,7 @@ jobs:
       NEXT_PUBLIC_SUPABASE_ENDPOINT: ${{ vars.NEXT_PUBLIC_SUPABASE_ENDPOINT }}
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
       NEXT_PUBLIC_SUPABASE_IMG_BUCKET: ${{ vars.NEXT_PUBLIC_SUPABASE_IMG_BUCKET }}
-      OPENAI_API_KEY: ${{vars.OPENAI_API_KEY}}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
