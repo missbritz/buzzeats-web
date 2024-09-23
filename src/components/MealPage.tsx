@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Form,
     FormControl,
@@ -18,6 +18,41 @@ import { allergenItems } from "@/config/constants";
 import { Checkbox } from "./ui/checkbox";
 import { Button } from "./ui/button";
 
+const ing = {
+    mealName: "Quinoa Chickpea Salad",
+    ingredients: [
+      "1 cup cooked quinoa",
+      "1 can (15 oz) chickpeas, drained and rinsed",
+      "1 cup cherry tomatoes, halved",
+      "1 cucumber, diced",
+      "1 cup bell peppers (red and yellow), diced",
+      "1/4 cup red onion, finely chopped",
+      "1 avocado, diced",
+      "1/4 cup fresh parsley, chopped",
+      "2 tbsp olive oil",
+      "1 tbsp lemon juice",
+      "1 tsp garlic powder",
+      "Salt and pepper to taste"
+    ],
+    instructions: [
+      "In a large mixing bowl, combine the cooked quinoa and chickpeas.",
+      "Add the cherry tomatoes, cucumber, bell peppers, red onion, avocado, and parsley to the bowl.",
+      "In a small bowl, whisk together the olive oil, lemon juice, garlic powder, salt, and pepper.",
+      "Pour the dressing over the salad and gently toss to combine.",
+      "Serve immediately or refrigerate for 30 minutes to let the flavors meld."
+    ],
+    totalCalories: 450,
+    nutritionFacts: {
+      "protein": "15g",
+      "carbohydrates": "60g",
+      "fiber": "14g",
+      "fats": "18g",
+      "sugar": "5g",
+      "sodium": "300mg"
+    },
+    extras: "This salad is vegan and gluten-free. Feel free to add grilled chicken or tofu for extra protein."
+  }
+
 const FormSchema = z.object({
     allergen: z
         .array(z.string())
@@ -34,13 +69,21 @@ const FormSchema = z.object({
     moreIngredients: z.string().optional()
 });
 
-const MealPage = ({ meal, mealError }: any) => {
+const MealPage = ({ meal, mealError, completed }: any) => {
     const SUPABASE_ENDPOINT = process.env.NEXT_PUBLIC_SUPABASE_ENDPOINT || '';
     const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
     const SUPABASE_IMG_BUCKET =
         process.env.NEXT_PUBLIC_SUPABASE_IMG_BUCKET || '';
 
     const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
+
+    const [imageUploadFailed, setImageUploadFailed] = useState<boolean>(false)
+
+    useEffect(() => {
+        completed(false)
+        meal({})
+        mealError({})
+    }, [])
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -72,6 +115,7 @@ const MealPage = ({ meal, mealError }: any) => {
     };
 
     const processIngredientsImg = async (event: any) => {
+        setImageUploadFailed(false)
         const file = event.target.files[0];
         const bucket = SUPABASE_IMG_BUCKET;
 
@@ -83,11 +127,14 @@ const MealPage = ({ meal, mealError }: any) => {
         // Handle error if upload failed
         if (error) {
             console.log(error);
+            setImageUploadFailed(true)
+            form.setError("moreIngredients", { type: "custom", message: "Uh oh! Please choose another image." })
             return;
         }
 
         //Retrieve image
         form.setValue('ingredientsImg', retrieveImage(data));
+        form.clearErrors("moreIngredients")
     };
 
     const checkCalories = (e: number) => {
@@ -117,12 +164,19 @@ const MealPage = ({ meal, mealError }: any) => {
             ...e,
             ingredients: ingredientsArr,
         };
-        const { data, error } = await supabase.functions.invoke('openai', {
-            body: JSON.stringify(params),
-        });
+        // const { data, error } = await supabase.functions.invoke('openai', {
+        //     body: JSON.stringify(params),
+        // });
+
+        const data = await new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(ing)
+            }, 300)
+        })
 
         meal(data && Object.keys(data).length ? data : {})
-        mealError(error ? error : {})
+        //mealError(error ? error : {})
+        completed(true)
     }
 
     const { handleSubmit } = form;
@@ -373,6 +427,7 @@ const MealPage = ({ meal, mealError }: any) => {
                         <Button
                             className="m-10"
                             type="submit"
+                            disabled={imageUploadFailed}
                         >
                             Let's get cooking!
                         </Button>
