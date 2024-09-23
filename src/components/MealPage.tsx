@@ -227,9 +227,9 @@ const MealPage = ({ meal, mealError, completed }: any) => {
                                             <Input
                                                 type="text"
                                                 className="md:mr-5 w-72"
-                                                onChangeCapture={(e) =>
+                                                onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>) =>
                                                     checkCalories(
-                                                        e.target.value
+                                                        parseInt(e.target.value)
                                                     )
                                                 }
                                                 placeholder="My calorie intake is..."
@@ -362,7 +362,7 @@ const MealPage = ({ meal, mealError, completed }: any) => {
                                                                                 setCheckBoxFn(
                                                                                     field,
                                                                                     item,
-                                                                                    checked
+                                                                                    Boolean(checked)
                                                                                 )
                                                                             }
                                                                         />
@@ -381,8 +381,6 @@ const MealPage = ({ meal, mealError, completed }: any) => {
                                     />
                                 </div>
                         </div>
-                        {console.log(form.getValues())}
-                        {console.log(form.formState)}
                         <Button
                             className="m-10"
                             type="submit"

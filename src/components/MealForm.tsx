@@ -8,8 +8,8 @@ import { MealTypeDef, ErrorDef } from './Meal';
 import ErrorForm from './Error';
 
 export default function MealForm() {
-    const [meal, setMeal] = useState<MealTypeDef>({});
-    const [error, setError] = useState<ErrorDef>({});
+    const [meal, setMeal] = useState<MealTypeDef>({} as MealTypeDef);
+    const [error, setError] = useState<ErrorDef>({} as ErrorDef);
     const [completed, setCompleted] = useState(false)
 
     return (
