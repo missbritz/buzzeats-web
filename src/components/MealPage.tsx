@@ -160,7 +160,7 @@ const MealPage = ({ meal, mealError, completed }: any) => {
                                                 type="text"
                                                 {...field}
                                                 placeholder="My kitchen has..."
-                                                className="md:mr-5 w-72"
+                                                className="w-72"
                                                 onChangeCapture={(
                                                     e
                                                 ) => {
@@ -177,6 +177,7 @@ const MealPage = ({ meal, mealError, completed }: any) => {
                                     </FormItem>
                                 )}
                             />
+                            <span className="text-xs font-normal text-stone-400 pt-5">You may upload a photo of your ingredients.</span>
                             <FormField
                                 control={form.control}
                                 name="moreIngredients"
@@ -185,7 +186,7 @@ const MealPage = ({ meal, mealError, completed }: any) => {
                                         <FormControl>
                                             <Input
                                                 type="file"
-                                                className="md:mr-5 md:mt-0 mt-5 w-72"
+                                                className="md:mt-0 mt-5 w-72"
                                                 {...field}
                                                 onChangeCapture={(
                                                     e
@@ -226,7 +227,7 @@ const MealPage = ({ meal, mealError, completed }: any) => {
                                         <FormControl>
                                             <Input
                                                 type="text"
-                                                className="md:mr-5 w-72"
+                                                className="w-72"
                                                 onChangeCapture={(e: React.ChangeEvent<HTMLInputElement>) =>
                                                     checkCalories(
                                                         parseInt(e.target.value)
@@ -241,7 +242,7 @@ const MealPage = ({ meal, mealError, completed }: any) => {
                                 )}
                             />
                             <h3 className="text-stone-400 px-5 pt-10 pb-5 font-bold">
-                                What meal are you making for?
+                                What meal are you making for?**
                             </h3>
                             <div className="w-full px-5 text-left">
                             <FormField
@@ -331,7 +332,7 @@ const MealPage = ({ meal, mealError, completed }: any) => {
                                 />
                             </div>
                                 <h3 className="text-stone-400 px-5 pt-10 pb-5 font-bold">
-                                    Do you diet restrictions or allergens?
+                                    Do you diet restrictions or allergens?**
                                 </h3>
                                 <div className="w-full px-5 text-left">
                                     <FormField
@@ -381,6 +382,7 @@ const MealPage = ({ meal, mealError, completed }: any) => {
                                     />
                                 </div>
                         </div>
+                        <span className="text-xs font-bold text-stone-400">**required</span>
                         <Button
                             className="m-10"
                             type="submit"
