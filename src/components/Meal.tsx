@@ -1,10 +1,7 @@
 import React from "react";
-// import { Button } from "./ui/button";
-
 interface nutrifactsItem {
     [key:string]: string
 }
-
 export interface ErrorDef {
     [key:string]: string
 }
