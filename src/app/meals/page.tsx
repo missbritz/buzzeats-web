@@ -2,20 +2,23 @@
 
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import MealForm from '@/components/MealForm';
+import Meal from '@/components/Meal';
+import MealJson from '../../../mock.json';
 
-export default function Home() {
+const meal = JSON.parse(JSON.stringify(MealJson))
+
+export default function Meals() {
     return (
         <main className="min-h-screen items-center flex-col justify-center">
             <Header />
             <div className="flex justify-center">
-                <div className="max-w-5xl flex items-center text-center min-h-80 py-12">
+                <div className="max-w-5xl w-full self-center py-12">
                     <div className="w-full px-5">
-                        <MealForm />
+                        <Meal meal={meal}/>
                     </div>
                 </div>
             </div>
-            <Footer />
+            <Footer/>
         </main>
     );
 }
