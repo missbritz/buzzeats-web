@@ -1,11 +1,11 @@
 import { signUpAction } from "@/actions";
-import { FormMessage } from "@/components/FormMessage";
+import { FormMessage, Message } from "@/components/FormMessage";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SubmitButton } from "@/components/ui/submit-button";
 import Link from "next/link";
 
-const RegisterForm = ({ searchParams }: any) => {
+const RegisterForm = ({ message }: { message: Message }) => {
 
     return (
         <form className="flex flex-col min-w-64 max-w-64 mx-auto">
@@ -30,7 +30,7 @@ const RegisterForm = ({ searchParams }: any) => {
           <SubmitButton formAction={signUpAction} pendingText="Signing up...">
             Register
           </SubmitButton>
-          <FormMessage message={searchParams}/>
+          <FormMessage message={message}/>
         </div>
       </form>
     )

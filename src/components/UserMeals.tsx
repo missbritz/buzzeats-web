@@ -2,7 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 
 
 const UserMeals = ({ savedMeals }: any) => {
-    console.log(savedMeals)
+
     return (
             <div className="self-center py-12">
                 <div className="w-full px-5">

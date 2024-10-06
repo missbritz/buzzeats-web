@@ -3,9 +3,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { SubmitButton } from "./ui/submit-button";
-import { FormMessage } from "./FormMessage";
+import { FormMessage, Message } from "./FormMessage";
 
-export default function Login({ searchParams }) {
+export default function Login({ message }: { message: Message }) {
   return (
     <form className="flex-1 flex flex-col w-full gap-2 text-foreground [&>input]:mb-6 min-w-64 max-w-64 mx-auto">
       <h1 className="text-2xl font-medium">Sign in</h1>
@@ -36,7 +36,7 @@ export default function Login({ searchParams }) {
           <SubmitButton formAction={signInAction} pendingText="Loggin in...">
             Login
           </SubmitButton>
-          <FormMessage message={searchParams}/>
+          <FormMessage message={message}/>
       </div>
     </form>
   );

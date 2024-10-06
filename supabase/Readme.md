@@ -1,11 +1,14 @@
 # buzzeats-web
+---
 This is buzzeats-web's core API built with Supabase Edge Function where OpenAI is integrated.
 
 ### Prerequisites
+---
 - Docker
 - Supabase CLI
 
 ## Getting Started
+---
 1. Create your Supabase Edge Function.  It will start a step by step setup for your Edge function.  The code below will create a supabase directory of your project with the function name.  The function name becomes the folder name of your function.
 
     ```bash
