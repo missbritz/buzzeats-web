@@ -1,5 +1,5 @@
 # buzzeats-web
-[![Deploy to Github Pages](https://github.com/missbritz/buzzeats-web/actions/workflows/github-pages.yml/badge.svg)](https://github.com/missbritz/buzzeats-web/actions/workflows/github-pages.yml)
+![Vercel Deploy](https://deploy-badge.vercel.app/vercel/buzzeats-web)
 
 AI-powered meal generator and supports edible object recognition from uploaded image using OpenAI GPT-4o-mini.
 
