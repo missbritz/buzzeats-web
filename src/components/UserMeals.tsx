@@ -1,8 +1,8 @@
-import { Table } from "lucide-react"
-import { TableHeader, TableRow, TableHead, TableBody, TableCell } from "./ui/table"
+import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "./ui/table"
 
 
 const UserMeals = ({ savedMeals }: any) => {
+    console.log(savedMeals)
     return (
         <div className="flex justify-center">
             <div className="max-w-5xl w-full self-center py-12">
@@ -17,7 +17,7 @@ const UserMeals = ({ savedMeals }: any) => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {savedMeals.map((meal) => (
+                            {savedMeals.map((meal:any) => (
                             <TableRow key={meal.mealId}>
                                 <TableCell className="font-medium text-left">{meal.mealDate}</TableCell>
                                 <TableCell className="text-left">{meal.mealName}</TableCell>

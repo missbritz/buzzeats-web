@@ -2,6 +2,7 @@
 
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import UserMeals from '@/components/UserMeals';
 
 const allMeals = [
@@ -24,10 +25,6 @@ const allMeals = [
 
 export default function Home() {
     return (
-        <main className="min-h-screen items-center flex-col justify-center">
-            <Header />
-                <UserMeals savedMeals={allMeals}/>
-            <Footer/>
-        </main>
+        <UserMeals savedMeals={allMeals} />
     );
 }
