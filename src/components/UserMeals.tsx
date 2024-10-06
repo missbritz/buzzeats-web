@@ -1,12 +1,12 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
 
 
-const UserMeals = ({ savedMeals }: any) => {
+const UserMeals = ({ savedMeals, user }: any) => {
 
     return (
             <div className="self-center py-12">
                 <div className="w-full px-5">
-                    <h2 className="text-left">Hi <strong>User</strong></h2>
+                    <h2 className="text-left"><strong>Ola!  Welcome back!</strong></h2>
                     {savedMeals.length ? (
                     <Table className="w-full">
                         <TableHeader>

@@ -13,12 +13,13 @@ const RegisterForm = ({ message }: { message: Message }) => {
         <p className="text-sm text text-foreground">
           Already have an account?{" "}
           <Link className="text-primary font-medium underline" href="/login">
-            Sign in
+            Login
           </Link>
         </p>
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
           <Label htmlFor="email">Email</Label>
           <Input name="email" placeholder="you@example.com" required />
+          <Input name="name" placeholder="John Smith" required/>
           <Label htmlFor="password">Password</Label>
           <Input
             type="password"
