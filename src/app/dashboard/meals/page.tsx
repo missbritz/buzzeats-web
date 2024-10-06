@@ -1,5 +1,3 @@
-'use client';
-
 import Meal from '@/components/Meal';
 
 const MealJson = {
