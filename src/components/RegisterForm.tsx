@@ -1,15 +1,18 @@
-import { Button } from "@/components/ui/button";
+import { signUpAction } from "@/actions";
+import { FormMessage } from "@/components/FormMessage";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { SubmitButton } from "@/components/ui/submit-button";
 import Link from "next/link";
 
-export default function Signup() {
-  return (
-      <form className="flex flex-col min-w-64 max-w-64 mx-auto">
-        <h1 className="text-2xl font-medium">Sign up</h1>
+const RegisterForm = ({ searchParams }: any) => {
+
+    return (
+        <form className="flex flex-col min-w-64 max-w-64 mx-auto">
+        <h1 className="text-2xl font-medium">Register</h1>
         <p className="text-sm text text-foreground">
           Already have an account?{" "}
-          <Link className="text-primary font-medium underline" href="/sign-in">
+          <Link className="text-primary font-medium underline" href="/login">
             Sign in
           </Link>
         </p>
@@ -24,10 +27,13 @@ export default function Signup() {
             minLength={6}
             required
           />
-          <Button>
-            Sign up
-          </Button>
+          <SubmitButton formAction={signUpAction} pendingText="Signing up...">
+            Register
+          </SubmitButton>
+          <FormMessage message={searchParams}/>
         </div>
       </form>
-  );
+    )
 }
+
+export default RegisterForm

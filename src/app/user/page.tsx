@@ -1,8 +1,5 @@
 'use client';
 
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
-import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import UserMeals from '@/components/UserMeals';
 
 const allMeals = [
@@ -23,7 +20,7 @@ const allMeals = [
     }
 ]
 
-export default function Home() {
+export default function UserMeal() {
     return (
         <UserMeals savedMeals={allMeals} />
     );

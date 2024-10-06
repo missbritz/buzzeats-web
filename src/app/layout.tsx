@@ -23,7 +23,7 @@ export default function RootLayout({
             <main className="min-h-screen items-center flex-col justify-center">
                 <Header />
                 <div className="flex justify-center">
-                    <div className="max-w-5xl flex items-center text-center min-h-80 py-12">
+                    <div className="max-w-5xl w-full flex items-center text-center min-h-80 py-12">
                         <div className="w-full px-5">
                             {children}
                         </div>

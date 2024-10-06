@@ -1,13 +1,12 @@
-import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "./ui/table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
 
 
 const UserMeals = ({ savedMeals }: any) => {
     console.log(savedMeals)
     return (
-        <div className="flex justify-center">
-            <div className="max-w-5xl w-full self-center py-12">
+            <div className="self-center py-12">
                 <div className="w-full px-5">
-                    <h2>Hi <strong>User</strong></h2>
+                    <h2 className="text-left">Hi <strong>User</strong></h2>
                     {savedMeals.length ? (
                     <Table className="w-full">
                         <TableHeader>
@@ -31,7 +30,6 @@ const UserMeals = ({ savedMeals }: any) => {
 
                 </div>
             </div>
-        </div>
     )
 }
 
