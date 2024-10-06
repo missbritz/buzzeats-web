@@ -1,5 +1,3 @@
-'use client';
-
 import UserMeals from '@/components/UserMeals';
 import { createClient } from '@supabase/supabase-js';
 import { redirect } from 'next/navigation';
