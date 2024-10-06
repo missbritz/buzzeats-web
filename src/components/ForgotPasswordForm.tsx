@@ -1,3 +1,4 @@
+
 import { forgotPasswordAction } from "../actions";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,7 +14,7 @@ export default function ForgotPasswordForm ({ message }: { message: Message }) {
             <p className="text-sm text-secondary-foreground">
                 Already have an account?{" "}
                 <Link className="text-primary underline" href="/register">
-                Sign in
+                Register
                 </Link>
             </p>
             </div>

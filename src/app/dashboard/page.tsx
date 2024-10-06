@@ -1,5 +1,5 @@
 import UserMeals from '@/components/UserMeals';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "../../../utils/supabase/server";
 import { redirect } from 'next/navigation';
 
 const allMeals = [
@@ -22,19 +22,17 @@ const allMeals = [
 
 export default async function UserMeal() {
 
-    const SUPABASE_ENDPOINT = process.env.NEXT_PUBLIC_SUPABASE_ENDPOINT || '';
-    const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-
-    const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
+    const supabase = createClient();
 
     const {
       data: { user },
     } = await supabase.auth.getUser();
-  
+
     if (!user) {
       return redirect("/login");
     }
+
     return (
-        <UserMeals savedMeals={allMeals} />
+        <UserMeals savedMeals={allMeals} user={user}/>
     );
 }
