@@ -1,5 +1,6 @@
 import { getUserMeals } from "@/actions/tables"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
+import { SavedMealTypeDef } from "./Meal"
 
 
 const UserMeals = async ({ user }: any) => {
@@ -9,7 +10,7 @@ const UserMeals = async ({ user }: any) => {
         <div className="self-center py-12">
             <div className="w-full px-5">
                 <h2 className="text-left"><strong>Ola!  Welcome back!</strong></h2>
-                {meals.length ? (
+                {Array.isArray(meals) ? (
                 <Table className="w-full">
                     <TableHeader>
                         <TableRow>
@@ -19,8 +20,8 @@ const UserMeals = async ({ user }: any) => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {meals.map((meal:any) => (
-                        <TableRow key={meal.mealId}>
+                        {meals.map((meal:SavedMealTypeDef) => (
+                        <TableRow key={meal.id}>
                             <TableCell className="font-medium text-left">{new Date(meal.created_at).toISOString().split('T')[0]}</TableCell>
                             <TableCell className="text-left capitalize">{meal.mealType}</TableCell>
                             <TableCell className="text-left">{meal.mealName}</TableCell>

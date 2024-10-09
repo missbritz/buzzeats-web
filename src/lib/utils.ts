@@ -6,6 +6,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 
-export function deconstructArr (arr: [string]) {
-    return arr.map((i) => Object.values(i)).flat()
+export function deconstructArr (arr:any) {
+    return arr.map((i:any) => Object.values(i)).flat()
 }

@@ -16,7 +16,7 @@ export const saveMeal = async (meal: MealTypeDef, user:string) => {
 
    if (error) {
         console.log(error)
-        return error
+        return 'Ooops something went wrong!'
    }
    
 }
@@ -41,6 +41,10 @@ export const saveUserMeal = async (mealId:string, userId:string) => {
     }
 }
 
+interface UserMealId {
+    mealId: number
+}
+
 export const getUserMeals = async (userId: string) => {
     const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
    const { data, error } = await supabase.from('user_meals').select('meal_id').eq('user_id', userId);
@@ -50,13 +54,12 @@ export const getUserMeals = async (userId: string) => {
     }
 
     if (error) {
-        console.log('usermealsId', userId)
-        console.log('usermeals', error)
+        console.log(error)
         return 'Ooops something went wrong!'
     }
 }
 
-export const getMeals = async (mealId: object) => {
+export const getMeals = async (mealId: UserMealId[]) => {
     const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
    const { data, error } = await supabase.from('meals').select().in('id', mealId);
 

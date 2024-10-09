@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import Meal from './Meal';
 import MealPage from './MealPage';
 import { useState } from 'react';
-import { MealTypeDef, ErrorDef } from './Meal';
+import { MealTypeDef, ErrorDef, MessageDef } from './Meal';
 import ErrorForm from './Error';
 import { saveMeal } from '@/actions/tables';
 
@@ -12,13 +12,12 @@ export default async function MealForm({ user } : any) {
     const [meal, setMeal] = useState<MealTypeDef>({} as MealTypeDef);
     const [error, setError] = useState<ErrorDef>({} as ErrorDef);
     const [completed, setCompleted] = useState(false)
-    const [message, setMessage] = useState(''); 
+    const [message, setMessage] = useState<MessageDef>(''); 
 
-    const SaveMealFn = (meal, userId) => {
+    const SaveMealFn = (meal:MealTypeDef, userId: string) => {
         const saveMealData = saveMeal(meal, userId);
-        setMessage(saveMealData) 
+        setMessage(saveMealData)
     }
-
 
     return (
         <div className="w-full">
