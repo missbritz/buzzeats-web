@@ -3,7 +3,7 @@
 
 AI-powered meal generator and supports edible object recognition from uploaded image using OpenAI GPT-4o-mini.
 
-Try it out here [https://buzzeats-web.vercel.app/](buzzeats-web.vercel.app)
+Try it out here [https://buzzeats-web.vercel.app/](https://buzzeats-web.vercel.app/)
 
 ## Getting Started
 
