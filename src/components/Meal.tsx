@@ -15,6 +15,20 @@ export interface MealTypeDef {
     extras: string
 }
 
+export interface SavedMealTypeDef {
+    id: string
+    mealName: string
+    ingredients: string[]
+    instructions: string[]
+    nutritionFacts: nutrifactsItem
+    totalCalories: number
+    extras: string
+    mealType: string
+    created_at: string
+}
+
+export type MessageDef = any
+
 interface MealDef {
     meal: MealTypeDef | undefined
 }

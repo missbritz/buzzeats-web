@@ -1,7 +1,6 @@
 import { Bangers } from 'next/font/google';
 import Link from 'next/link';
 import { createClient } from '../../utils/supabase/server';
-import { Button } from './ui/button';
 
 const bangers = Bangers({ weight: ['400'], subsets: ['latin'] });
 
@@ -11,6 +10,7 @@ export default async function Header () {
     const {
       data: { user },
     } = await supabase.auth.getUser();
+    console.log(user)
 
     const Intro = ({ user }:any) => {
         return user ? (
