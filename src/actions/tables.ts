@@ -7,7 +7,6 @@ const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
 export const saveMeal = async (meal: MealTypeDef, user:string) => {
   
-    // const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
     const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
    const { data, error } = await supabase.from('meals').insert({...meal}).select('id');
   
@@ -57,17 +56,16 @@ export const getUserMeals = async (userId: string) => {
     }
 }
 
-export const getMeals = async (mealId: [string]) => {
+export const getMeals = async (mealId: object) => {
     const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
    const { data, error } = await supabase.from('meals').select().in('id', mealId);
-  console.log('meals', data)
+
    if (data) {
         return data
     }
 
     if (error) {
-        console.log('mealsId', mealId)
-        console.log('meals', error)
+        console.log(error)
         return 'Ooops something went wrong!'
     }
 }
