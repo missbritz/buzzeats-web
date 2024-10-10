@@ -7,9 +7,9 @@ const UserMeals = async ({ user }: any) => {
     const meals = await getUserMeals(user.user_metadata.sub)
 
     return (
-        <div className="self-center py-12">
+        <div className="self-center">
             <div className="w-full px-5">
-                <h2 className="text-left"><strong>Ola!  Welcome back!</strong></h2>
+                <h2 className="text-left mb-5 text-3xl text-stone-400"><strong>My Meals</strong></h2>
                 {Array.isArray(meals) && meals.length ? (
                 <Table className="w-full">
                     <TableHeader>
