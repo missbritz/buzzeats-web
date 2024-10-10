@@ -44,4 +44,31 @@ const allergenItems = [
     },
 ];
 
-export { sectionTitle, allergenItems };
+const menuItems = {
+    anon: [
+        {
+            title: "Login",
+            href: "/login"
+          },
+          {
+            title: "Generate Meals",
+            href: "/"
+          }
+    ],
+    auth: [
+        {
+            title: "My Meals",
+            href: "/dashboard/"
+          },
+          {
+            title: "Generate Meal",
+            href: "/"
+          },
+          {
+            title: "Logout",
+            href: "/logout"
+          }
+    ],
+}
+
+export { sectionTitle, allergenItems, menuItems };

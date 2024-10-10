@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
 
 import { cn } from "@/lib/utils"
 import {
@@ -13,40 +12,28 @@ import {
   NavigationMenuTrigger
 } from "@/components/ui/navigation-menu"
 
-const menuItems = {
-    anon: [
-        {
-            title: "Login",
-            href: "/login"
-          },
-          {
-            title: "Generate Meals",
-            href: "/"
-          }
-    ],
-    auth: [
-        {
-            title: "My Meals",
-            href: "/dashboard/"
-          },
-          {
-            title: "Generate Meal",
-            href: "/"
-          },
-          {
-            title: "Logout",
-            href: "/logout"
-          }
-    ],
+import { menuItems } from "@/config/constants"
+
+type UserTypeDef = 'anon' | 'auth'
+
+
+interface UserNavigationDef {
+    userType: UserTypeDef,
+    menu: {
+        [key:string]: {
+            title: string
+            href: string
+        }[]
+    }
 }
 
-const UserNavigation = ({ userType, menu }) => {
+const UserNavigation = ({ userType, menu }: UserNavigationDef) => {
     return menu[userType].map(i => {
         return <ListItem href={i.href} title={i.title} />
     })
 }
 
-export function AppNavigation({ user }) {
+export function AppNavigation({ user }: any) {
   return (
     <NavigationMenu>
       <NavigationMenuList>

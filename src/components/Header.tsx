@@ -12,7 +12,6 @@ export default async function Header () {
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    console.log(user)
 
     const Intro = ({ user }:any) => {
         return user ? (
@@ -33,7 +32,9 @@ export default async function Header () {
         <div className="bg-lime-500 p-12 flex flex-row justify-center">
             <div className="max-w-5xl w-full">
                 <div className="flex justify-end">
-                    <AppNavigation user={user}/>
+                    <div>
+                        <AppNavigation user={user}/>
+                    </div>
                 </div>
                 <div className="items-center text-center mt-4">
                     <h1
