@@ -1,6 +1,8 @@
 import { Bangers } from 'next/font/google';
 import Link from 'next/link';
 import { createClient } from '../../utils/supabase/server';
+import { Button } from './ui/button';
+import { AppNavigation } from './UserNavigation';
 
 const bangers = Bangers({ weight: ['400'], subsets: ['latin'] });
 
@@ -30,10 +32,10 @@ export default async function Header () {
     return (
         <div className="bg-lime-500 p-12 flex flex-row justify-center">
             <div className="max-w-5xl w-full">
-                <div className="text-right">
-                    {user ? <Link href="/logout" className="text-stone-500 pt-4 pb-10">Logout</Link> : <Link href="/login" className='text-stone-500 pt-4 pb-10'>Login</Link>}
+                <div className="flex justify-end">
+                    <AppNavigation user={user}/>
                 </div>
-                <div className="items-center text-center">
+                <div className="items-center text-center mt-4">
                     <h1
                         className={`text-white text-5xl p-5 ${bangers.className}`}
                     >

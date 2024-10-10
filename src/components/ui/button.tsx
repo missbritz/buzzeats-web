@@ -21,11 +21,14 @@ const buttonVariants = cva(
                     'bg-secondary text-secondary-foreground hover:bg-secondary/80',
                 ghost: 'hover:bg-accent hover:text-accent-foreground',
                 link: 'text-stone-500 underline-offset-4 hover:underline',
+                outlineWhite:
+                'border-2 border-input border-white bg-none text-white hover:bg-lime-600',
             },
             size: {
                 default: 'h-10 px-4 p-7 rounded-lg',
                 sm: 'h-9 rounded-md px-3',
                 lg: 'h-11 rounded-md px-8',
+                xs: 'h-9 rounded-md px-3 mr-2',
                 icon: 'h-10 w-10',
             },
         },
