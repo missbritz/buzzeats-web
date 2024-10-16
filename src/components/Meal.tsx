@@ -41,10 +41,12 @@ const Meal = (props: MealDef) => {
 
     const { mealName, ingredients, instructions, nutritionFacts, totalCalories, extras } = meal
     return (
-        <div className="max-w-xl">
+        <div>
             <h2 className="text-lime-500 text-center font-bold text-3xl py-4">
                 {mealName}
             </h2>
+
+        <div className="max-w-xl">
             <div className="flex justify-center flex-col pb-12 text-left">
                 <h3 className="text-stone-500 font-bold text-md pt-8 pb-4">
                     Ingredients
@@ -98,6 +100,7 @@ const Meal = (props: MealDef) => {
                 </Button>
                 <Button variant="link">Save this meal</Button>
             </div> */}
+            </div>
         </div>
     )
 }
