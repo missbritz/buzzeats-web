@@ -6,18 +6,18 @@ import MealPage from './MealPage';
 import { useState } from 'react';
 import { MealTypeDef, ErrorDef, MessageDef } from './Meal';
 import ErrorForm from './Error';
-import { saveMeal } from '@/actions/tables';
+import SaveMeal from './SaveMeal';
 
 export default async function MealForm({ user } : any) {
     const [meal, setMeal] = useState<MealTypeDef>({} as MealTypeDef);
     const [error, setError] = useState<ErrorDef>({} as ErrorDef);
     const [completed, setCompleted] = useState(false)
-    const [message, setMessage] = useState<MessageDef>(''); 
+    // const [message, setMessage] = useState<MessageDef>(''); 
 
-    const SaveMealFn = (meal:MealTypeDef, userId: string) => {
-        const saveMealData = saveMeal(meal, userId);
-        setMessage(saveMealData)
-    }
+    // const SaveMealFn = (meal:MealTypeDef, userId: string) => {
+    //     const saveMealData = saveMeal(meal, userId);
+    //     setMessage(saveMealData)
+    // }
 
     return (
         <div className="w-full">
@@ -25,12 +25,13 @@ export default async function MealForm({ user } : any) {
             {Object.keys(meal).length ? (
                 <div>
                     <Meal meal={meal} />
-                    {user ? 
+                    <SaveMeal user={user} meal={meal}/>
+                    {/* {user ? 
                     (<div>
                         <Button onClick={() => SaveMealFn(meal, user.user_metadata.sub)}>Save this meal</Button>
                         {message}
                     </div>
-                    ) : ''}
+                    ) : ''} */}
                 </div>
             ) : null}
             {Object.keys(error).length ? <ErrorForm /> : null}
