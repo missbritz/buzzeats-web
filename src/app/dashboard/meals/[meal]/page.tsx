@@ -14,18 +14,6 @@ async function getMealInfo (slug: string) {
 
 }
 
-// export async function generateStaticParams() {
-
-//   const meals = await getMeals();
-
-//   if (!meals) return []
-//   return meals.length ? meals.map((meal:any) => {
-//      return { 
-//       meal: slugify(meal.mealName)
-//      }
-//   }) : []
-// }
-
 export default async function Meals({ params }: { params: { meal: string } }) {
 
     const getMeal = await getMealInfo(params.meal) || []
