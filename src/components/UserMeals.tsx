@@ -1,6 +1,8 @@
 import { getUserMeals } from "@/actions/tables"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
 import { SavedMealTypeDef } from "./Meal"
+import { slugify } from "../../utils/utils"
+import Link from "next/link"
 
 
 const UserMeals = async ({ user }: any) => {
@@ -21,11 +23,11 @@ const UserMeals = async ({ user }: any) => {
                     </TableHeader>
                     <TableBody>
                         {meals.map((meal:SavedMealTypeDef) => (
-                        <TableRow key={meal.id}>
-                            <TableCell className="font-medium text-left">{new Date(meal.created_at).toISOString().split('T')[0]}</TableCell>
-                            <TableCell className="text-left capitalize">{meal.mealType}</TableCell>
-                            <TableCell className="text-left">{meal.mealName}</TableCell>
-                        </TableRow>
+                            <TableRow>
+                                <TableCell className="font-medium text-left">{new Date(meal.created_at).toISOString().split('T')[0]}</TableCell>
+                                <TableCell className="text-left capitalize">{meal.mealType}</TableCell>
+                                <TableCell className="text-left"><Link href={`/dashboard/meals/${slugify(meal.mealName)}`}>{meal.mealName}</Link></TableCell>
+                            </TableRow>
                         ))}
                     </TableBody>
                 </Table>
