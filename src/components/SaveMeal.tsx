@@ -2,7 +2,7 @@ import { useState } from "react";
 import { MealTypeDef } from './Meal';
 import { Button } from "./ui/button"
 import { saveMeal } from '@/actions/tables';
-import Message from "./Message";
+import Message, { MessageDef } from "./Message";
 
 
 
