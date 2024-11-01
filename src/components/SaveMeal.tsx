@@ -15,8 +15,8 @@ export default function SaveMeal ({ user, meal}: { user: any, meal: MealTypeDef 
         <div>
         { user ? (
             <div>
-            <Button onClick={() => SaveMealFn(meal, user.user_metadata.sub)}>Save this meal</Button>
-                {message}
+                <Button onClick={() => SaveMealFn(meal, user.user_metadata.sub)}>Save this meal</Button>
+                <p>{message}</p>
             </div>
             ) : <></>
         }
