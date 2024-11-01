@@ -1,6 +1,7 @@
 import { MealTypeDef } from "@/components/Meal";
 import { deconstructArr } from "@/lib/utils";
 import { createClient } from "@supabase/supabase-js";
+import { slugify } from "../../utils/utils";
 
 const SUPABASE_ENDPOINT = process.env.NEXT_PUBLIC_SUPABASE_ENDPOINT || '';
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -8,7 +9,7 @@ const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 export const saveMeal = async (meal: MealTypeDef, user:string) => {
   
     const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
-    const { data, error } = await supabase.from('meals').insert({...meal}).select('id');
+    const { data, error } = await supabase.from('meals').insert({...meal, slug: slugify(meal.mealName)}).select('id');
     
     if (data) {
             return saveUserMeal(data[0].id, user)
