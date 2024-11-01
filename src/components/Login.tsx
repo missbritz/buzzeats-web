@@ -33,7 +33,7 @@ export default function Login({ message }: { message: Message }) {
           placeholder="Your password"
           required
         />
-          <SubmitButton formAction={signInAction} pendingText="Loggin in...">
+          <SubmitButton formAction={signInAction} pendingText="Logging in...">
             Login
           </SubmitButton>
           <FormMessage message={message}/>
