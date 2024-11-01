@@ -5,7 +5,7 @@ const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
 export const getMeals = async (slug: string) => {
   
-    const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
+   const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
    const { data, error } = await supabase.from('meals').select().eq('slug', slug);
   
    if (data) {
@@ -13,8 +13,25 @@ export const getMeals = async (slug: string) => {
    }
 
    if (error) {
-        console.log(error)
-        return []
+        throw new Error(error.message);
    }
+
+   throw new Error('Unknown error occurred');
    
+}
+
+export const deleteMeal = async (mealId: string) => {
+
+     const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
+     const { data, error } = await supabase.from('meals').delete().eq('id', mealId)
+     
+     if (data) {
+         return data
+     }
+
+     if (error) {
+          throw new Error(error.message);
+     } 
+ 
+     throw new Error('Unknown error occurred');
 }

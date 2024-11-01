@@ -83,23 +83,6 @@ const Meal = (props: MealDef) => {
                 </h3>
                 <p>Notes: {extras}</p>
             </div>
-            {/*
-            TO DO:
-                - Authentication integration
-            <div className="flex justify-center">
-                <Button variant="secondary">
-                    I don't like this meal. Next please.
-                </Button>
-            </div>
-            <div className="flex justify-center">
-                <Button
-                    variant="link"
-                    onClick={() => setPageTrail(1, 0)}
-                >
-                    Update my preference
-                </Button>
-                <Button variant="link">Save this meal</Button>
-            </div> */}
             </div>
         </div>
     )
