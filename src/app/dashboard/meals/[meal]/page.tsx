@@ -9,7 +9,6 @@ async function getMealInfo (slug: string) {
   if (!meals) return []
 
   return meals.length && meals?.filter(meal => {
-    console.log(slugify(meal.mealName), slug)
     return slugify(meal.mealName) === slug
   })
 
@@ -19,7 +18,6 @@ export default async function Meals({ params }: { params: { meal: string } }) {
 
     const getMeal = await getMealInfo(params.meal) || []
     const singleMeal = Object.assign({}, getMeal.length ? getMeal[0] : {})
-    console.log(singleMeal)
 
     return (
       singleMeal && <Meal meal={singleMeal}/>
