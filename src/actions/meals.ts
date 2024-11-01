@@ -35,3 +35,23 @@ export const deleteMeal = async (mealId: string) => {
  
      throw new Error('Unknown error occurred');
 }
+
+
+
+export const generateMeal = async (params:any) => {
+
+     const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
+     const { data, error } = await supabase.functions.invoke('openai', {
+          body: JSON.stringify(params),
+     });
+
+     if (data) {
+          return data
+     }
+
+     if (error) {
+          return error
+     } 
+
+     throw new Error('Unknown error occurred');
+}
