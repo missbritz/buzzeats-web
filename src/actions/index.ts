@@ -4,6 +4,7 @@ import { encodedRedirect } from "../../utils/utils";
 import { createClient } from "../../utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import API from '../api'
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
@@ -42,12 +43,8 @@ export const signUpAction = async (formData: FormData) => {
 export const signInAction = async (formData: FormData) => {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
-  const supabase = createClient();
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  const { error } = await API.USER_SIGNIN(email, password)
 
   if (error) {
     return encodedRedirect("error", "/login", error.message);
@@ -58,17 +55,15 @@ export const signInAction = async (formData: FormData) => {
 
 export const forgotPasswordAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
-  const supabase = createClient();
   const origin = headers().get("origin");
   const callbackUrl = formData.get("callbackUrl")?.toString();
+  const path = '/auth/callback?redirect_to=/dashboard/reset-password';
 
   if (!email) {
     return encodedRedirect("error", "/forgot-password", "Email is required");
   }
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${origin}/auth/callback?redirect_to=/dashboard/reset-password`,
-  });
+  const { error } = await API.USER_FORGOTPASSWORD(origin, path, email)
 
   if (error) {
     console.error(error.message);
@@ -91,7 +86,6 @@ export const forgotPasswordAction = async (formData: FormData) => {
 };
 
 export const resetPasswordAction = async (formData: FormData) => {
-  const supabase = createClient();
 
   const password = formData.get("password") as string;
   const confirmPassword = formData.get("confirmPassword") as string;
@@ -112,9 +106,7 @@ export const resetPasswordAction = async (formData: FormData) => {
     );
   }
 
-  const { error } = await supabase.auth.updateUser({
-    password: password,
-  });
+  const { error } = await API.USER_UPDATE(password)
 
   if (error) {
     encodedRedirect(

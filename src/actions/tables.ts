@@ -1,16 +1,11 @@
 import { MealTypeDef } from "@/components/Meal";
 import { deconstructArr } from "@/lib/utils";
-import { createClient } from "@supabase/supabase-js";
-import { slugify } from "../../utils/utils";
 import { deleteMeal } from "./meals";
-
-const SUPABASE_ENDPOINT = process.env.NEXT_PUBLIC_SUPABASE_ENDPOINT || '';
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+import API from '../api';
 
 export const saveMeal = async (meal: MealTypeDef, user:string) => {
   
-    const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
-    const { data, error } = await supabase.from('meals').insert({...meal, slug: slugify(meal.mealName)}).select('id');
+    const { data, error } = await API.SAVE_MEAL(meal)
     
     if (error) {
         throw new Error(error.message);
@@ -25,11 +20,7 @@ export const saveMeal = async (meal: MealTypeDef, user:string) => {
 
 export const saveUserMeal = async (mealId:string, userId:string) => {
   
-    const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
-    const { data, error } = await supabase.from('user_meals').insert({
-        meal_id: mealId,
-        user_id: userId
-    });
+    const { data, error } = await API.SAVE_USER_MEAL(mealId, userId)
     
     if (data) {
         console.log(data, 'User meal saved successful')
@@ -44,13 +35,8 @@ export const saveUserMeal = async (mealId:string, userId:string) => {
     throw new Error('Unknown error occurred');
 }
 
-interface UserMealId {
-    mealId: number
-}
-
 export const getUserMeals = async (userId: string) => {
-    const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
-    const { data, error } = await supabase.from('user_meals').select('meal_id').eq('user_id', userId);
+    const { data, error } = await API.GET_USER_MEALS(userId)
 
     if (data) {
         return getMeals(deconstructArr(data))
@@ -63,9 +49,13 @@ export const getUserMeals = async (userId: string) => {
     throw new Error('Unknown error occurred');
 }
 
+
+export interface UserMealId {
+    mealId: number
+}
+
 export const getMeals = async (mealId: UserMealId[]) => {
-    const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
-    const { data, error } = await supabase.from('meals').select().in('id', mealId);
+    const { data, error } = await API.GET_MEALS_BY_ID(mealId)
 
     if (data) {
         return data

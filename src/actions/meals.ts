@@ -1,13 +1,9 @@
 import { MealTypeDef } from "@/components/Meal";
-import { createClient } from "@supabase/supabase-js";
-
-const SUPABASE_ENDPOINT = process.env.NEXT_PUBLIC_SUPABASE_ENDPOINT || '';
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+import API from '../api'
 
 export const getMeals = async (slug: string) => {
-  
-   const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
-   const { data, error } = await supabase.from('meals').select().eq('slug', slug);
+
+   const { data, error } = await API.GET_MEALS_BY_SLUG(slug)
   
    if (data) {
         return data
@@ -23,8 +19,7 @@ export const getMeals = async (slug: string) => {
 
 export const deleteMeal = async (mealId: string) => {
 
-     const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
-     const { data, error } = await supabase.from('meals').delete().eq('id', mealId)
+     const { data, error } = await API.DELETE_MEAL(mealId)
      
      if (data) {
          return data
@@ -44,10 +39,7 @@ type mealDataDef = {
 }
 
 export const generateMeal = async (params:any) => {
-     const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
-     const { data, error } = await supabase.functions.invoke('openai', {
-          body: JSON.stringify(params),
-     });
+     const { data, error } = await API.GENERATE_MEAL(params)
 
      const mealData:mealDataDef = {
           data: data,
