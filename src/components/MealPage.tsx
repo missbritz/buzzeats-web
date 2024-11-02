@@ -17,6 +17,7 @@ import { Label } from "./ui/label";
 import { allergenItems } from "@/config/constants";
 import { Checkbox } from "./ui/checkbox";
 import { Button } from "./ui/button";
+import { generateMeal } from "@/actions/meals";
 
 const FormSchema = z.object({
     allergen: z
@@ -129,9 +130,8 @@ const MealPage = ({ meal, mealError, completed }: any) => {
             ...e,
             ingredients: ingredientsArr,
         };
-        const { data, error } = await supabase.functions.invoke('openai', {
-            body: JSON.stringify(params),
-        });
+
+        const { data, error } = await generateMeal(params)
 
         meal(data && Object.keys(data).length ? data : {})
         mealError(error ? error : {})
