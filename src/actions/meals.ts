@@ -1,3 +1,4 @@
+import { MealTypeDef } from "@/components/Meal";
 import { createClient } from "@supabase/supabase-js";
 
 const SUPABASE_ENDPOINT = process.env.NEXT_PUBLIC_SUPABASE_ENDPOINT || '';
@@ -37,21 +38,29 @@ export const deleteMeal = async (mealId: string) => {
 }
 
 
+type mealDataDef = {
+     data: MealTypeDef,
+     error: Error
+}
 
 export const generateMeal = async (params:any) => {
-
      const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
      const { data, error } = await supabase.functions.invoke('openai', {
           body: JSON.stringify(params),
      });
 
-     if (data) {
-          return data
+     const mealData:mealDataDef = {
+          data: data,
+          error: error
+     };
+
+     if (!data) {
+          delete mealData?.data
      }
 
-     if (error) {
-          return error
-     } 
+     if (!error) {
+          delete mealData?.error
+     }
 
-     throw new Error('Unknown error occurred');
+     return mealData
 }
