@@ -39,8 +39,8 @@ export const deleteMeal = async (mealId: string) => {
 
 
 type mealDataDef = {
-     data: MealTypeDef,
-     error: Error
+     data?: MealTypeDef,
+     error?: Error
 }
 
 export const generateMeal = async (params:any) => {
@@ -55,11 +55,11 @@ export const generateMeal = async (params:any) => {
      };
 
      if (!data) {
-          delete mealData?.data
+          delete mealData.data
      }
 
      if (!error) {
-          delete mealData?.error
+          delete mealData.error
      }
 
      return mealData
