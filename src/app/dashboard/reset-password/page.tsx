@@ -1,4 +1,4 @@
-import { Message } from "@/components/FormMessage";
+import { Message } from '../../../types'
 import ResetPasswordForm from "@/components/ResetPassword";
 
 export default async function ResetPassword({

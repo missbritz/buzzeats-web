@@ -1,4 +1,4 @@
-import { MealTypeDef } from "@/components/Meal";
+import { MealTypeDef, UserMealId } from "../types";
 import { deconstructArr } from "@/lib/utils";
 import { deleteMeal } from "./meals";
 import API from '../api';
@@ -47,11 +47,6 @@ export const getUserMeals = async (userId: string) => {
     }
 
     throw new Error('Unknown error occurred');
-}
-
-
-export interface UserMealId {
-    mealId: number
 }
 
 export const getMeals = async (mealId: UserMealId[]) => {

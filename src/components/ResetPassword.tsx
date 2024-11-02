@@ -1,8 +1,9 @@
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { SubmitButton } from "./ui/submit-button";
-import { FormMessage, Message } from "./FormMessage";
+import { FormMessage } from "./FormMessage";
 import { resetPasswordAction } from "@/actions";
+import { Message } from "@/types";
 
 export default function ResetPasswordForm ({ message }: { message: Message }) {
     return (

@@ -52,3 +52,12 @@ export type Message = {
     error?: string | null;
     message?: string | null;
 };
+
+export type mealDataDef = {
+    data?: MealTypeDef,
+    error?: Error
+}
+
+export interface UserMealId {
+    mealId: number
+}

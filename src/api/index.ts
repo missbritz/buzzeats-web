@@ -1,5 +1,4 @@
-import { UserMealId } from "@/actions/tables";
-import { MealTypeDef } from "../types";
+import { MealTypeDef, UserMealId } from "../types";
 import { createClient } from "@supabase/supabase-js";
 import { slugify } from "../../utils/utils";
 

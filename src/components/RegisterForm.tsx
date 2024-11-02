@@ -1,9 +1,10 @@
 import { signUpAction } from "@/actions";
-import { FormMessage, Message } from "@/components/FormMessage";
+import { FormMessage } from "@/components/FormMessage";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SubmitButton } from "@/components/ui/submit-button";
 import Link from "next/link";
+import { Message } from "@/types";
 
 const RegisterForm = ({ message }: { message: Message }) => {
 

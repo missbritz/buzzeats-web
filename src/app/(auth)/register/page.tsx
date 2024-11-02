@@ -1,4 +1,4 @@
-import { Message } from "@/components/FormMessage";
+import { Message } from '../../../types'
 import RegisterForm from "@/components/RegisterForm";
 
 export default async function RegisterPage({

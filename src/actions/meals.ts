@@ -1,4 +1,4 @@
-import { MealTypeDef } from "@/components/Meal";
+import { mealDataDef } from "../types";
 import API from '../api'
 
 export const getMeals = async (slug: string) => {
@@ -30,12 +30,6 @@ export const deleteMeal = async (mealId: string) => {
      } 
  
      throw new Error('Unknown error occurred');
-}
-
-
-type mealDataDef = {
-     data?: MealTypeDef,
-     error?: Error
 }
 
 export const generateMeal = async (params:any) => {
