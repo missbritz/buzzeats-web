@@ -3,7 +3,7 @@
 import Meal from './Meal';
 import MealPage from './MealPage';
 import { useState } from 'react';
-import { MealTypeDef, ErrorDef } from './Meal';
+import { MealTypeDef, ErrorDef } from '../types';
 import ErrorForm from './Error';
 import SaveMeal from './SaveMeal';
 

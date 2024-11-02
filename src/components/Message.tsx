@@ -1,9 +1,5 @@
+import { MessageDef } from "@/types"
 import { useState } from "react"
-
-export type MessageDef = {
-    message: string
-    state: string
-}
 
 export default function Message({ message, state }: MessageDef){
     const [isRemoved, setIsRemoved] = useState(false)

@@ -1,5 +1,5 @@
 import { UserMealId } from "@/actions/tables";
-import { MealTypeDef } from "@/components/Meal";
+import { MealTypeDef } from "../types";
 import { createClient } from "@supabase/supabase-js";
 import { slugify } from "../../utils/utils";
 
@@ -109,8 +109,7 @@ const USER_UPDATE = async (password: string) => {
     }
 }
 
-
-export default {
+const API = {
     GET_MEALS_BY_SLUG,
     DELETE_MEAL,
     GENERATE_MEAL,
@@ -122,3 +121,6 @@ export default {
     USER_FORGOTPASSWORD,
     USER_UPDATE
 }
+
+
+export default API

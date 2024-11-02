@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { MealTypeDef } from './Meal';
+import { MealTypeDef, MessageDef } from '../types';
 import { Button } from "./ui/button"
 import { saveMeal } from '@/actions/tables';
-import Message, { MessageDef } from "./Message";
-
-
+import Message from "./Message";
 
 export default function SaveMeal({ user, meal, setCompleted }: { user: any; meal: MealTypeDef; setCompleted: (value: boolean) => void }) {
     const [message, setMessage] = useState<MessageDef>({message: '', state: ''});

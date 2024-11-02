@@ -1,7 +1,6 @@
 import { Bangers } from 'next/font/google';
 import Link from 'next/link';
 import { createClient } from '../../utils/supabase/server';
-import { Button } from './ui/button';
 import { AppNavigation } from './UserNavigation';
 
 const bangers = Bangers({ weight: ['400'], subsets: ['latin'] });

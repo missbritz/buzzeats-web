@@ -1,8 +1,4 @@
-export type Message = {
-  success?: string | null;
-  error?: string | null;
-  message?: string | null;
-};
+import { Message } from "@/types";
 
 export function FormMessage({ message }: { message: Message }) {
   return (

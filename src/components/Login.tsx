@@ -3,7 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { SubmitButton } from "./ui/submit-button";
-import { FormMessage, Message } from "./FormMessage";
+import { FormMessage } from "./FormMessage";
+import { Message } from "@/types";
 
 export default function Login({ message }: { message: Message }) {
   return (
