@@ -13,19 +13,7 @@ import {
 } from "@/components/ui/navigation-menu"
 
 import { menuItems } from "@/config/constants"
-
-type UserTypeDef = 'anon' | 'auth'
-
-
-interface UserNavigationDef {
-    userType: UserTypeDef,
-    menu: {
-        [key:string]: {
-            title: string
-            href: string
-        }[]
-    }
-}
+import { UserNavigationDef } from "@/types"
 
 const UserNavigation = ({ userType, menu }: UserNavigationDef) => {
     return menu[userType].map(i => {

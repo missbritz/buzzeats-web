@@ -1,37 +1,7 @@
 import React from "react";
-interface nutrifactsItem {
-    [key:string]: string
-}
-export interface ErrorDef {
-    [key:string]: string
-}
-
-export interface MealTypeDef {
-    mealName: string
-    ingredients: string[]
-    instructions: string[]
-    nutritionFacts: nutrifactsItem
-    totalCalories: number
-    extras: string
-}
-
-export interface SavedMealTypeDef {
-    id: string
-    mealName: string
-    ingredients: string[]
-    instructions: string[]
-    nutritionFacts: nutrifactsItem
-    totalCalories: number
-    extras: string
-    mealType: string
-    created_at: string
-}
-
-export type MessageDef = any
-
-interface MealDef {
-    meal: MealTypeDef | undefined
-}
+import {
+    MealDef
+} from '../types';
 
 const Meal = (props: MealDef) => {
     if (!props.meal) return

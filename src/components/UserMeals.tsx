@@ -1,6 +1,6 @@
 import { getUserMeals } from "@/actions/tables"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
-import { SavedMealTypeDef } from "./Meal"
+import { SavedMealTypeDef } from "../types"
 import { slugify } from "../../utils/utils"
 import Link from "next/link"
 

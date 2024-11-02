@@ -1,5 +1,5 @@
 import ForgotPasswordForm from "@/components/ForgotPasswordForm";
-import { Message } from "@/components/FormMessage";
+import { Message } from '../../../types'
 
 export default async function ForgotPasswordPage({
   searchParams,
