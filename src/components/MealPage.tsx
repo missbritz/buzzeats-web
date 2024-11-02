@@ -131,19 +131,10 @@ const MealPage = ({ meal, mealError, completed }: any) => {
             ingredients: ingredientsArr,
         };
 
-        let mealData, mealErr;
-        try{
-            const { data, error } = await generateMeal(params)
-            if (error) {
-                throw new Error(error)
-            }
-            mealData = data
-        } catch(err) {
-            mealErr = err
-        }
+        const { data, error } = await generateMeal(params)
 
-        meal(mealData && Object.keys(mealData).length ? mealData : {})
-        mealError(mealErr ? mealErr : {})
+        meal(data && Object.keys(data).length ? data : {})
+        mealError(error ? error : {})
         completed(true)
     }
 

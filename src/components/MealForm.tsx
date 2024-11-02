@@ -23,7 +23,6 @@ export default function MealForm({ user }: { user: any }) {
                     <SaveMeal user={user} meal={meal} setCompleted={setCompleted} />
                 </div>
             ) : null}
-            {console.log(error)}
             {Object.keys(error).length ? <ErrorForm /> : null}
         </div>
     );
