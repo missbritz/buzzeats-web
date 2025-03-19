@@ -61,3 +61,10 @@ export type mealDataDef = {
 export interface UserMealId {
     mealId: number
 }
+
+export interface GenerateMealParams {
+    ingredients?: string;
+    mealType?: string;
+    calories?: number;
+    allergens?: string[];
+}

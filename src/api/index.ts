@@ -74,18 +74,6 @@ const GENERATE_MEAL = async (params: any) => {
     }
 }
 
-const USER_SIGNIN = async (email: string, password: string) => {
-    const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
-    const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-    });
-
-    return {
-        error
-    }
-}
-
 const USER_FORGOTPASSWORD = async (origin: string | null, path: string, email: string) => {
     const supabase = createClient(SUPABASE_ENDPOINT, SUPABASE_KEY);
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -116,7 +104,6 @@ const API = {
     SAVE_USER_MEAL,
     GET_USER_MEALS,
     GET_MEALS_BY_ID,
-    USER_SIGNIN,
     USER_FORGOTPASSWORD,
     USER_UPDATE
 }

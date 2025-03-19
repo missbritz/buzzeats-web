@@ -18,9 +18,10 @@ const RegisterForm = ({ message }: { message: Message }) => {
           </Link>
         </p>
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
+          <Label htmlFor="name">Name</Label>
+          <Input name="name" placeholder="John Smith" required/>
           <Label htmlFor="email">Email</Label>
           <Input name="email" placeholder="you@example.com" required />
-          <Input name="name" placeholder="John Smith" required/>
           <Label htmlFor="password">Password</Label>
           <Input
             type="password"
