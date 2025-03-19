@@ -43,8 +43,12 @@ export const signUpAction = async (formData: FormData) => {
 export const signInAction = async (formData: FormData) => {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const supabase = createClient();
 
-  const { error } = await API.USER_SIGNIN(email, password)
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
   if (error) {
     return encodedRedirect("error", "/login", error.message);
@@ -111,7 +115,7 @@ export const resetPasswordAction = async (formData: FormData) => {
   if (error) {
     encodedRedirect(
       "error",
-      "/dashhboard/reset-password",
+      "/dashboard/reset-password",
       "Password update failed",
     );
   }
